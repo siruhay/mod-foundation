@@ -39,7 +39,9 @@ class FoundationOfficialController extends Controller
     {
         Gate::authorize('create', FoundationOfficial::class);
 
-        $request->validate([]);
+        $request->validate([
+            'slug' => 'required|min_digits:16|numeric'
+        ]);
 
         return FoundationOfficial::storeRecord($request);
     }

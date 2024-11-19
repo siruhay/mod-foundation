@@ -44,7 +44,9 @@ class FoundationMemberController extends Controller
     {
         Gate::authorize('create', FoundationMember::class);
 
-        $request->validate([]);
+        $request->validate([
+            'slug' => 'required|min_digits:16|numeric'
+        ]);
 
         return FoundationMember::storeRecord($request, $foundationCommunity);
     }

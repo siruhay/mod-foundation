@@ -59,6 +59,44 @@ class FoundationMember extends Model
     protected $defaultOrder = 'name';
 
     /**
+     * mapCombos function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapCombos(Request $request): array
+    {
+        return [
+            'genders' => FoundationGender::forCombo(),
+            'positions' => FoundationPosition::forCombo()
+        ];
+    }
+
+    /**
+     * mapResourceShow function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResourceShow(Request $request, $model): array
+    {
+        return [
+            'name' => $model->name,
+            'slug' => $model->slug,
+            'phone' => $model->phone,
+            'gender_id' => $model->gender_id,
+            'position_id' => $model->position_id,
+            'village_id' => $model->village_id,
+            'subdistrict_id' => $model->subdistrict_id,
+            'regency_id' => $model->regency_id,
+            'community_id' => $model->community_id,
+            'communitymap_id' => $model->communitymap_id,
+            'citizen' => $model->citizen,
+            'neighborhood' => $model->neighborhood,
+        ];
+    }
+
+    /**
      * The model store method
      *
      * @param Request $request
@@ -71,7 +109,19 @@ class FoundationMember extends Model
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $request->name;
+            $model->slug = $request->slug;
+            $model->phone = $request->phone;
+            $model->gender_id = $request->gender_id;
+            $model->position_id = $request->position_id;
+            $model->village_id = $parent->village_id;
+            $model->subdistrict_id = $parent->subdistrict_id;
+            $model->regency_id = $parent->regency_id;
+            $model->community_id = $parent->id;
+            $model->communitymap_id = $parent->communitymap_id;
+            $model->citizen = $request->citizen;
+            $model->neighborhood = $request->neighborhood;
+
             $parent->members()->save($model);
 
             DB::connection($model->connection)->commit();

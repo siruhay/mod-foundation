@@ -58,6 +58,42 @@ class FoundationOfficial extends Model
     protected $defaultOrder = 'name';
 
     /**
+     * mapCombos function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapCombos(Request $request, $model = null): array
+    {
+        return [
+            'genders' => FoundationGender::forCombo(),
+            'positions' => FoundationPosition::forCombo(),
+            'subdistricts' => FoundationSubdistrict::where('regency_id', 3)->forCombo(),
+            'villages' => optional($model)->subdistrict_id ? FoundationVillage::where('district_id', $model->subdistrict_id)->forCombo() : [],
+        ];
+    }
+
+    /**
+     * mapResourceShow function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResourceShow(Request $request, $model): array
+    {
+        return [
+            'name' => $model->name,
+            'slug' => $model->slug,
+            'phone' => $model->phone,
+            'gender_id' => $model->gender_id,
+            'position_id' => $model->position_id,
+            'village_id' => $model->village_id,
+            'subdistrict_id' => $model->subdistrict_id,
+            'regency_id' => $model->regency_id,
+        ];
+    }
+
+    /**
      * The model store method
      *
      * @param Request $request
@@ -65,12 +101,21 @@ class FoundationOfficial extends Model
      */
     public static function storeRecord(Request $request)
     {
-        $model = new static();
+        $model          = new static();
+        $subdistrict    = FoundationSubdistrict::find($request->subdistrict_id);
 
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $request->name;
+            $model->slug = $request->slug;
+            $model->phone = $request->phone;
+            $model->gender_id = $request->gender_id;
+            $model->position_id = $request->position_id;
+            $model->regency_id = $subdistrict->regency_id;
+            $model->subdistrict_id = $request->subdistrict_id;
+            $model->village_id = $request->village_id;
+
             $model->save();
 
             DB::connection($model->connection)->commit();
