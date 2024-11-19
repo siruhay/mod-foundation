@@ -8,6 +8,7 @@ use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -54,7 +55,59 @@ class FoundationSubdistrict extends Model
      *
      * @var string
      */
-    protected $defaultOrder = 'name';
+    protected $defaultOrder = ['regency_id:asc', 'name:asc'];
+
+    /**
+     * mapHeaders function
+     *
+     * readonly value?: SelectItemKey<any>
+     * readonly title?: string | undefined
+     * readonly align?: 'start' | 'end' | 'center' | undefined
+     * readonly width?: string | number | undefined
+     * readonly minWidth?: string | undefined
+     * readonly maxWidth?: string | undefined
+     * readonly nowrap?: boolean | undefined
+     * readonly sortable?: boolean | undefined
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapHeaders(Request $request): array
+    {
+        return [
+            ['title' => 'Nama', 'value' => 'name'],
+            ['title' => 'Kota/Kab', 'value' => 'regencyname'],
+            ['title' => 'Updated', 'value' => 'updated_at', 'sortable' => false, 'width' => '170'],
+        ];
+    }
+
+    /**
+     * mapResource function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResource(Request $request, $model): array
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+            'regencyname' => $model->regency->type . ' - ' . $model->regency->name,
+
+            'subtitle' => (string) $model->updated_at,
+            'updated_at' => (string) $model->updated_at,
+        ];
+    }
+
+    /**
+     * regency function
+     *
+     * @return BelongsTo
+     */
+    public function regency(): BelongsTo
+    {
+        return $this->belongsTo(FoundationRegency::class, 'regency_id');
+    }
 
     /**
      * villages function

@@ -22,6 +22,7 @@ class FoundationSubdistrictController extends Controller
 
         return new SubdistrictCollection(
             FoundationSubdistrict::applyMode($request->mode)
+                ->with(['regency'])
                 ->filter($request->filters)
                 ->search($request->findBy)
                 ->sortBy($request->sortBy)
