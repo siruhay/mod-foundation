@@ -79,7 +79,7 @@ class FoundationMemberController extends Controller
 
         $request->validate([]);
 
-        return FoundationMember::updateRecord($request, $foundationMember);
+        return FoundationMember::updateRecord($request, $foundationMember, $foundationCommunity);
     }
 
     /**

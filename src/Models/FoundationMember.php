@@ -144,12 +144,23 @@ class FoundationMember extends Model
      * @param [type] $model
      * @return void
      */
-    public static function updateRecord(Request $request, $model)
+    public static function updateRecord(Request $request, $model, $parent)
     {
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $request->name;
+            $model->slug = $request->slug;
+            $model->phone = $request->phone;
+            $model->gender_id = $request->gender_id;
+            $model->position_id = $request->position_id;
+            $model->village_id = $parent->village_id;
+            $model->subdistrict_id = $parent->subdistrict_id;
+            $model->regency_id = $parent->regency_id;
+            $model->community_id = $parent->id;
+            $model->communitymap_id = $parent->communitymap_id;
+            $model->citizen = $request->citizen;
+            $model->neighborhood = $request->neighborhood;
             $model->save();
 
             DB::connection($model->connection)->commit();
