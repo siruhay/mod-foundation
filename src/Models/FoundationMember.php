@@ -9,9 +9,13 @@ use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Module\Foundation\Events\MemberUpdated;
 use Module\Foundation\Models\FoundationCommunity;
 use Module\Foundation\Http\Resources\MemberResource;
+use Module\System\Models\SystemUser;
 
 class FoundationMember extends Model
 {
@@ -68,7 +72,7 @@ class FoundationMember extends Model
     {
         return [
             'genders' => FoundationGender::forCombo(),
-            'positions' => FoundationPosition::forCombo()
+            'positions' => FoundationPosition::where('scope', 'MEMBER')->forCombo()
         ];
     }
 
@@ -94,6 +98,26 @@ class FoundationMember extends Model
             'citizen' => $model->citizen,
             'neighborhood' => $model->neighborhood,
         ];
+    }
+
+    /**
+     * user function
+     *
+     * @return MorphOne
+     */
+    public function user(): MorphOne
+    {
+        return $this->morphOne(SystemUser::class, 'userable');
+    }
+
+    /**
+     * position function
+     *
+     * @return BelongsTo
+     */
+    public function position(): BelongsTo
+    {
+        return $this->belongsTo(FoundationPosition::class, 'position_id');
     }
 
     /**
@@ -123,6 +147,8 @@ class FoundationMember extends Model
             $model->neighborhood = $request->neighborhood;
 
             $parent->members()->save($model);
+
+            MemberUpdated::dispatch($model);
 
             DB::connection($model->connection)->commit();
 
@@ -162,6 +188,8 @@ class FoundationMember extends Model
             $model->citizen = $request->citizen;
             $model->neighborhood = $request->neighborhood;
             $model->save();
+
+            MemberUpdated::dispatch($model);
 
             DB::connection($model->connection)->commit();
 

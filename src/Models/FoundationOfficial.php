@@ -67,7 +67,7 @@ class FoundationOfficial extends Model
     {
         return [
             'genders' => FoundationGender::forCombo(),
-            'positions' => FoundationPosition::forCombo(),
+            'positions' => FoundationPosition::where('scope', 'OFFICIAL')->forCombo(),
             'subdistricts' => FoundationSubdistrict::where('regency_id', 3)->forCombo(),
             'villages' => optional($model)->subdistrict_id ? FoundationVillage::where('district_id', $model->subdistrict_id)->forCombo() : [],
         ];
