@@ -77,6 +77,25 @@ class FoundationMember extends Model
     }
 
     /**
+     * mapResource function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResource(Request $request, $model): array
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+            'slug' => $model->slug,
+            'position' => $model->position->name,
+
+            'subtitle' => (string) $model->updated_at,
+            'updated_at' => (string) $model->updated_at,
+        ];
+    }
+
+    /**
      * mapResourceShow function
      *
      * @param Request $request
@@ -126,7 +145,7 @@ class FoundationMember extends Model
      * @param Request $request
      * @return void
      */
-    public static function storeRecord(Request $request, FoundationCommunity $parent)
+    public static function storeRecord(Request $request, $parent)
     {
         $model = new static();
 
