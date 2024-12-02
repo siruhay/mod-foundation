@@ -25,6 +25,7 @@ class FoundationMemberController extends Controller
         return new MemberCollection(
             $foundationCommunity
                 ->members()
+                ->with(['position'])
                 ->applyMode($request->mode)
                 ->filter($request->filters)
                 ->search($request->findBy)

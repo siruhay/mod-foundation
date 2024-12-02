@@ -59,6 +59,43 @@ class FoundationCommunity extends Model
     protected $defaultOrder = 'name';
 
     /**
+     * toFilterableArray function
+     * 
+     * {param} => {field} | {mode}::{field} 
+     * mode = raw | json | month | eager | orwhere
+     *
+     * @return array
+     */
+    protected function toFilterableArray(): array
+    {
+        return [
+            'subdistrict' => 'subdistrict_id'
+        ];
+    }
+
+    /**
+     * mapFilters function
+     * 
+     * type: Combobox, DateInput, NumberInput, Select, Textfield, TimeInput, Hidden
+     *
+     * @return array
+     */
+    public static function mapFilters(): array
+    {
+        return [
+            'subdistrict' => [
+                'title' => 'Kecamatan',
+                'data' => FoundationSubdistrict::where('regency_id', 3)->forCombo(),
+                'used' => false,
+                'operators' => ['=', '<', '>'],
+                'operator' => ['='],
+                'type' => 'Select',
+                'value' => null,
+            ],
+        ];
+    }
+
+    /**
      * mapCombos function
      *
      * @param Request $request
