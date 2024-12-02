@@ -30,18 +30,22 @@ class OfficialImport implements ToCollection, WithHeadingRow
             $this->command->getOutput()->progressAdvance();
 
             $record     = (object) $row->toArray();
-            $village    = FoundationVillage::firstWhere('slug', $record->village_id);
+            $village    = FoundationVillage::find($record->village_id);
 
             /** CREATE NEW RECORD */
-            $model = new FoundationOfficial();
-            $model->name = $record->name;
-            $model->phone = $record->phone;
-            $model->gender_id = $record->gender_id;
-            $model->position_id = $record->position_id;
-            $model->village_id = optional($village)->id;
-            $model->subdistrict_id = optional($village)->subdistrict_id;
-            $model->regency_id = optional($village)->regency_id;
-            $model->save();
+            $model = FoundationOfficial::firstWhere('phone', $record->handphone);
+
+            if ($record->handphone && !$model) {
+                $model = new FoundationOfficial();
+                $model->name = $record->name;
+                $model->phone = $record->handphone;
+                $model->gender_id = $record->gender_id;
+                $model->position_id = $record->position_id;
+                $model->village_id = optional($village)->id;
+                $model->subdistrict_id = optional($village)->district_id;
+                $model->regency_id = optional($village)->regency_id;
+                $model->save();
+            }
         }
 
         $this->command->getOutput()->progressFinish();
