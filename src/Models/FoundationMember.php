@@ -76,6 +76,21 @@ class FoundationMember extends Model
     }
 
     /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapHeaders(Request $request): array
+    {
+        return [
+            ['title' => 'Name', 'value' => 'name'],
+            ['title' => 'Jabatan', 'value' => 'position'],
+            ['title' => 'Updated', 'value' => 'updated_at', 'sortable' => false, 'width' => '170'],
+        ];
+    }
+
+    /**
      * mapResource function
      *
      * @param Request $request
