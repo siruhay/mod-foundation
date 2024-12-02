@@ -5,11 +5,13 @@ namespace Module\Foundation\Models;
 use Illuminate\Http\Request;
 use Module\System\Traits\HasMeta;
 use Illuminate\Support\Facades\DB;
+use Module\System\Models\SystemUser;
 use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Module\Foundation\Events\TrainingOfficialUpdated;
 use Module\Foundation\Http\Resources\OfficialResource;
 
@@ -92,6 +94,16 @@ class FoundationOfficial extends Model
             'subdistrict_id' => $model->subdistrict_id,
             'regency_id' => $model->regency_id,
         ];
+    }
+
+    /**
+     * user function
+     *
+     * @return MorphOne
+     */
+    public function user(): MorphOne
+    {
+        return $this->morphOne(SystemUser::class, 'userable');
     }
 
     /**
