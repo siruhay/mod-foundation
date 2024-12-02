@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 
-class MemberUpdated
+class TrainingMemberUpdated
 {
     use Dispatchable;
     use InteractsWithSockets;

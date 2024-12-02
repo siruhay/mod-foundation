@@ -10,6 +10,7 @@ use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Module\Foundation\Events\TrainingOfficialUpdated;
 use Module\Foundation\Http\Resources\OfficialResource;
 
 class FoundationOfficial extends Model
@@ -102,7 +103,7 @@ class FoundationOfficial extends Model
     public static function storeRecord(Request $request)
     {
         $model          = new static();
-        $subdistrict    = FoundationSubdistrict::find($request->subdistrict_id);
+        $village        = FoundationVillage::find($request->village_id);
 
         DB::connection($model->connection)->beginTransaction();
 
@@ -112,11 +113,13 @@ class FoundationOfficial extends Model
             $model->phone = $request->phone;
             $model->gender_id = $request->gender_id;
             $model->position_id = $request->position_id;
-            $model->regency_id = $subdistrict->regency_id;
-            $model->subdistrict_id = $request->subdistrict_id;
+            $model->regency_id = $village->regency_id;
+            $model->subdistrict_id = $village->district_id;
             $model->village_id = $request->village_id;
 
             $model->save();
+
+            TrainingOfficialUpdated::dispatch($model);
 
             DB::connection($model->connection)->commit();
 
@@ -140,11 +143,22 @@ class FoundationOfficial extends Model
      */
     public static function updateRecord(Request $request, $model)
     {
+        $village        = FoundationVillage::find($request->village_id);
+
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $request->name;
+            $model->slug = $request->slug;
+            $model->phone = $request->phone;
+            $model->gender_id = $request->gender_id;
+            $model->position_id = $request->position_id;
+            $model->regency_id = $village->regency_id;
+            $model->subdistrict_id = $village->district_id;
+            $model->village_id = $request->village_id;
             $model->save();
+
+            TrainingOfficialUpdated::dispatch($model);
 
             DB::connection($model->connection)->commit();
 

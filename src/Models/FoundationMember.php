@@ -5,17 +5,16 @@ namespace Module\Foundation\Models;
 use Illuminate\Http\Request;
 use Module\System\Traits\HasMeta;
 use Illuminate\Support\Facades\DB;
+use Module\System\Models\SystemUser;
 use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Module\Foundation\Events\MemberUpdated;
-use Module\Foundation\Models\FoundationCommunity;
+use Module\Foundation\Events\TrainingMemberUpdated;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Module\Foundation\Http\Resources\MemberResource;
-use Module\System\Models\SystemUser;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FoundationMember extends Model
 {
@@ -167,7 +166,7 @@ class FoundationMember extends Model
 
             $parent->members()->save($model);
 
-            MemberUpdated::dispatch($model);
+            TrainingMemberUpdated::dispatch($model);
 
             DB::connection($model->connection)->commit();
 
@@ -208,7 +207,7 @@ class FoundationMember extends Model
             $model->neighborhood = $request->neighborhood;
             $model->save();
 
-            MemberUpdated::dispatch($model);
+            TrainingMemberUpdated::dispatch($model);
 
             DB::connection($model->connection)->commit();
 
