@@ -44,9 +44,9 @@ class RouteServiceProvider extends ServiceProvider
     {
         // $domain = Cache::flexible('foundation-domain', [60, 3600], function() {
         //    try {
-        //        return optional(DB::table('system_modules')->where('slug', 'foundation')->first())->domain ?: 'backend';
+        //        return optional(DB::table('system_modules')->where('slug', 'foundation')->first())->domain ?: null;
         //    } catch (\Exception $e) {
-        //        return 'backend';
+        //        return null;
         //    }
         // });
 
@@ -76,9 +76,9 @@ class RouteServiceProvider extends ServiceProvider
     {
         $domain = Cache::flexible('foundation-domain', [60, 3600], function () {
             try {
-                return optional(DB::table('system_modules')->where('slug', 'foundation')->first())->domain ?: 'backend';
+                return optional(DB::table('system_modules')->where('slug', 'foundation')->first())->domain ?: null;
             } catch (\Exception $e) {
-                return 'backend';
+                return null;
             }
         });
 
