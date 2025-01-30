@@ -57,8 +57,8 @@ class RouteServiceProvider extends ServiceProvider
         //        return null;
         //    }
         // });
-        
-        // Route::domain($domain . '.' . env('APP_URL'))
+
+        // Route::domain($domain ? $domain . '.' . env('APP_URL') : env('APP_URL'))
         //     ->middleware('web')
         //     ->prefix($prefix)
         //     ->namespace('Module\Foundation\Http\Controllers')
@@ -74,7 +74,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes(): void
     {
-        $domain = Cache::flexible('foundation-domain', [60, 3600], function() {
+        $domain = Cache::flexible('foundation-domain', [60, 3600], function () {
             try {
                 return optional(DB::table('system_modules')->where('slug', 'foundation')->first())->domain ?: 'backend';
             } catch (\Exception $e) {
@@ -82,15 +82,15 @@ class RouteServiceProvider extends ServiceProvider
             }
         });
 
-        $prefix = Cache::flexible('foundation-prefix', [60, 3600], function() {
+        $prefix = Cache::flexible('foundation-prefix', [60, 3600], function () {
             try {
                 return optional(DB::table('system_modules')->where('slug', 'foundation')->first())->prefix ?: null;
             } catch (\Exception $e) {
                 return null;
             }
         });
-        
-        Route::domain($domain . '.' . env('APP_URL'))
+
+        Route::domain($domain ? $domain . '.' . env('APP_URL') : env('APP_URL'))
             ->prefix($prefix . '/api')
             ->middleware(['api', 'auth:sanctum'])
             ->namespace('Module\Foundation\Http\Controllers')
