@@ -165,6 +165,9 @@ class FoundationCommunity extends Model
             'village' => optional($model->village)->name,
             'village_id' => $model->village_id,
 
+            'citizen' => $model->citizen,
+            'neighborhood' => $model->neighborhood,
+
             'subtitle' => (string) $model->updated_at,
             'updated_at' => (string) $model->updated_at,
         ];
@@ -184,6 +187,8 @@ class FoundationCommunity extends Model
             'communitymap_id'   => $model->communitymap_id,
             'subdistrict_id'    => $model->subdistrict_id,
             'village_id'        => $model->village_id,
+            'citizen'           => $model->citizen,
+            'neighborhood'      => $model->neighborhood,
         ];
     }
 
