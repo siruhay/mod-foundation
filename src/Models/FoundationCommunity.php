@@ -9,8 +9,9 @@ use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Module\Foundation\Http\Resources\CommunityResource;
 
 class FoundationCommunity extends Model
@@ -69,7 +70,8 @@ class FoundationCommunity extends Model
     protected function toFilterableArray(): array
     {
         return [
-            'subdistrict' => 'subdistrict_id'
+            'subdistrict' => 'subdistrict_id',
+            'communitymap' => 'communitymap_id'
         ];
     }
 
@@ -83,6 +85,16 @@ class FoundationCommunity extends Model
     public static function mapFilters(): array
     {
         return [
+            'communitymap' => [
+                'title' => 'Tipe',
+                'data' => FoundationCommunitymap::forCombo(),
+                'used' => false,
+                'operators' => ['=', '<', '>'],
+                'operator' => ['='],
+                'type' => 'Select',
+                'value' => null,
+            ],
+
             'subdistrict' => [
                 'title' => 'Kecamatan',
                 'data' => FoundationSubdistrict::where('regency_id', 3)->forCombo(),
@@ -111,6 +123,31 @@ class FoundationCommunity extends Model
     }
 
     /**
+     * mapHeaders function
+     *
+     * readonly value?: SelectItemKey<any>
+     * readonly title?: string | undefined
+     * readonly align?: 'start' | 'end' | 'center' | undefined
+     * readonly width?: string | number | undefined
+     * readonly minWidth?: string | undefined
+     * readonly maxWidth?: string | undefined
+     * readonly nowrap?: boolean | undefined
+     * readonly sortable?: boolean | undefined
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapHeaders(Request $request): array
+    {
+        return [
+            ['title' => 'Name', 'value' => 'name'],
+            ['title' => 'Kecamatan', 'value' => 'subdistrict'],
+            ['title' => 'Desa/Kel', 'value' => 'village'],
+            ['title' => 'Updated', 'value' => 'updated_at', 'sortable' => false, 'width' => '170'],
+        ];
+    }
+
+    /**
      * mapResource function
      *
      * @param Request $request
@@ -121,6 +158,12 @@ class FoundationCommunity extends Model
         return [
             'id' => $model->id,
             'name' => $model->name,
+
+            'subdistrict' => optional($model->subdistrict)->name,
+            'subdistrict_id' => $model->subdistrict_id,
+
+            'village' => optional($model->village)->name,
+            'village_id' => $model->village_id,
 
             'subtitle' => (string) $model->updated_at,
             'updated_at' => (string) $model->updated_at,
@@ -155,6 +198,26 @@ class FoundationCommunity extends Model
     }
 
     /**
+     * subdistrict function
+     *
+     * @return HasMany
+     */
+    public function subdistrict(): BelongsTo
+    {
+        return $this->belongsTo(FoundationSubdistrict::class, 'subdistrict_id');
+    }
+
+    /**
+     * village function
+     *
+     * @return HasMany
+     */
+    public function village(): BelongsTo
+    {
+        return $this->belongsTo(FoundationVillage::class, 'village_id');
+    }
+
+    /**
      * The model store method
      *
      * @param Request $request
@@ -162,15 +225,26 @@ class FoundationCommunity extends Model
      */
     public static function storeRecord(Request $request)
     {
-        $model          = new static();
         $communitymap   = FoundationCommunitymap::find($request->communitymap_id);
         $subdistrict    = FoundationSubdistrict::find($request->subdistrict_id);
+        $village        = FoundationVillage::find($request->village_id);
+        $name           = optional($communitymap)->short ? optional($communitymap)->short . ' DESA ' . optional($village)->name : optional($communitymap)->name;
+        $slug           = sha1($name);
+
+        if ($model = static::firstWhere('slug', $slug)) {
+            return response()->json([
+                'success' => false,
+                'message' => "Lembaga: $name sudah ada dalam daftar."
+            ], 500);
+        }
+
+        $model          = new static();
 
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            $model->name = optional($communitymap)->name;
-            $model->slug = sha1($model->name);
+            $model->name = $name;
+            $model->slug = $slug;
             $model->communitymap_id = $request->communitymap_id;
             $model->subdistrict_id = $request->subdistrict_id;
             $model->village_id = $request->village_id;
@@ -199,10 +273,29 @@ class FoundationCommunity extends Model
      */
     public static function updateRecord(Request $request, $model)
     {
+        $communitymap   = FoundationCommunitymap::find($request->communitymap_id);
+        $subdistrict    = FoundationSubdistrict::find($request->subdistrict_id);
+        $village        = FoundationVillage::find($request->village_id);
+        $name           = optional($communitymap)->short ? optional($communitymap)->short . ' DESA ' . optional($village)->name : optional($communitymap)->name;
+        $slug           = sha1($name);
+        $exists         = static::firstWhere('slug', $slug);
+
+        if ($exists && $exists->id !== $model->id) {
+            return response()->json([
+                'success' => false,
+                'message' => "Lembaga: $name sudah ada dalam daftar."
+            ], 500);
+        }
+
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $name;
+            $model->slug = $slug;
+            $model->communitymap_id = $request->communitymap_id;
+            $model->subdistrict_id = $request->subdistrict_id;
+            $model->village_id = $request->village_id;
+            $model->regency_id = optional($subdistrict)->regency_id;
             $model->save();
 
             DB::connection($model->connection)->commit();

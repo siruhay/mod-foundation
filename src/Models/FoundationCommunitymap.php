@@ -58,6 +58,35 @@ class FoundationCommunitymap extends Model
     protected $defaultOrder = 'name';
 
     /**
+     * mapResource function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResource(Request $request, $model): array
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+            'short' => $model->short,
+
+            'subtitle' => (string) $model->updated_at,
+            'updated_at' => (string) $model->updated_at,
+        ];
+    }
+
+    /**
+     * mapResourceShow function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResourceShow(Request $request, $model): array
+    {
+        return static::mapResource($request, $model);
+    }
+
+    /**
      * The model store method
      *
      * @param Request $request
@@ -70,7 +99,9 @@ class FoundationCommunitymap extends Model
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $request->name;
+            $model->slug = sha1($request->name);
+            $model->short = $request->short;
             $model->save();
 
             DB::connection($model->connection)->commit();
@@ -98,7 +129,9 @@ class FoundationCommunitymap extends Model
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $request->name;
+            $model->slug = sha1($request->name);
+            $model->short = $request->short;
             $model->save();
 
             DB::connection($model->connection)->commit();

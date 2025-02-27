@@ -35,28 +35,38 @@ class MemberImport implements ToCollection, WithHeadingRow
 
             switch ($record->community_id) {
                 case 'BPD':
-                    $name = 'BPD DESA ' . $village->name;
-                    $maps = 1;
+                    $name           = 'BPD DESA ' . $village->name;
+                    $maps           = 1;
+                    $citizen        = null;
+                    $neighborhood   = null;
                     break;
 
                 case 'LPM':
-                    $name = 'LPM DESA ' . $village->name;
-                    $maps = 2;
+                    $name           = 'LPM DESA ' . $village->name;
+                    $maps           = 2;
+                    $citizen        = null;
+                    $neighborhood   = null;
                     break;
 
                 case 'PKK':
-                    $name = 'PKK DESA ' . $village->name;
-                    $maps = 3;
+                    $name           = 'PKK DESA ' . $village->name;
+                    $maps           = 3;
+                    $citizen        = null;
+                    $neighborhood   = null;
                     break;
 
                 case 'RW':
-                    $name = 'RW ' . str_pad($record->citizen, 2, "0", STR_PAD_LEFT) . ' DESA ' . $village->name;
-                    $maps = 4;
+                    $name           = 'RW ' . str_pad($record->citizen, 2, "0", STR_PAD_LEFT) . ' DESA ' . $village->name;
+                    $maps           = 4;
+                    $citizen        = str_pad($record->citizen, 2, "0", STR_PAD_LEFT);
+                    $neighborhood   = null;
                     break;
 
                 default:
-                    $name = 'RT ' . str_pad($record->citizen, 2, "0", STR_PAD_LEFT) . '/' . str_pad($record->neighborhood, 3, "0", STR_PAD_LEFT) .  ' DESA ' . $village->name;
-                    $maps = 5;
+                    $name           = 'RT ' . str_pad($record->citizen, 2, "0", STR_PAD_LEFT) . '/' . str_pad($record->neighborhood, 3, "0", STR_PAD_LEFT) .  ' DESA ' . $village->name;
+                    $maps           = 5;
+                    $citizen        = str_pad($record->citizen, 2, "0", STR_PAD_LEFT);
+                    $neighborhood   = str_pad($record->neighborhood, 3, "0", STR_PAD_LEFT);
                     break;
             }
 
@@ -71,6 +81,8 @@ class MemberImport implements ToCollection, WithHeadingRow
                 $community->village_id = $village->id;
                 $community->subdistrict_id = $village->district_id;
                 $community->regency_id = $village->regency_id;
+                $community->citizen = $citizen;
+                $community->neighborhood = $neighborhood;
                 $community->save();
             }
 

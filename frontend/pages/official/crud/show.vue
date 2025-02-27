@@ -1,6 +1,17 @@
 <template>
 	<form-show with-helpdesk>
-		<template v-slot:default="{ record }">
+		<template
+			v-slot:default="{
+				combos: {
+					genders,
+					positions,
+					subdistricts,
+					villages,
+				},
+				record,
+				store,
+			}"
+		>
 			<v-card-text>
 				<v-row dense>
 					<v-col cols="12">
@@ -40,7 +51,7 @@
 						></v-select>
 					</v-col>
 
-					<v-col cols="6">
+					<v-col cols="12">
 						<v-select
 							:items="genders"
 							label="Jenis Kelamin"
@@ -48,6 +59,34 @@
 							hide-details
 							readonly
 						></v-select>
+					</v-col>
+
+					<v-col cols="12">
+						<v-combobox
+							:items="subdistricts"
+							:return-object="false"
+							label="Kecamatan"
+							v-model="record.subdistrict_id"
+							hide-details
+							readonly
+							@update:modelValue="
+								updateSubdistrict(
+									$event,
+									store
+								)
+							"
+						></v-combobox>
+					</v-col>
+
+					<v-col cols="12">
+						<v-combobox
+							:items="villages"
+							:return-object="false"
+							label="Desa"
+							v-model="record.village_id"
+							hide-details
+							readonly
+						></v-combobox>
 					</v-col>
 				</v-row>
 			</v-card-text>

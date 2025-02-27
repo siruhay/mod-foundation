@@ -2,7 +2,12 @@
 	<form-create with-helpdesk>
 		<template
 			v-slot:default="{
-				combos: { genders, positions, subdistricts, villages },
+				combos: {
+					genders,
+					positions,
+					subdistricts,
+					villages,
+				},
 				record,
 				store,
 			}"
@@ -59,7 +64,10 @@
 							v-model="record.subdistrict_id"
 							hide-details
 							@update:modelValue="
-								updateSubdistrict($event, store)
+								updateSubdistrict(
+									$event,
+									store
+								)
 							"
 						></v-combobox>
 					</v-col>

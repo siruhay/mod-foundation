@@ -8,6 +8,7 @@ use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -56,6 +57,36 @@ class FoundationSubdistrict extends Model
      * @var string
      */
     protected $defaultOrder = ['regency_id:asc', 'name:asc'];
+
+    /**
+     * booted function
+     *
+     * @return void
+     */
+    protected static function booted(): void
+    {
+        static::addGlobalScope('onlyProcessed', function (Builder $query) {
+            $query->where('regency_id', 3);
+        });
+    }
+
+    /**
+     * mapStatuses function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapStatuses(Request $request): array
+    {
+        return [
+            'canCreate' => false,
+            'canEdit' => false,
+            'canUpdate' => false,
+            'canDelete' => false,
+            'canRestore' => false,
+            'canDestroy' => false,
+        ];
+    }
 
     /**
      * mapHeaders function

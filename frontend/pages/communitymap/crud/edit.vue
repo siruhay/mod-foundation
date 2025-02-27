@@ -7,6 +7,15 @@
 						<v-text-field
 							label="Name"
 							v-model="record.name"
+							hide-details
+						></v-text-field>
+					</v-col>
+
+					<v-col cols="12">
+						<v-text-field
+							label="Short"
+							v-model="record.short"
+							hide-details
 						></v-text-field>
 					</v-col>
 				</v-row>

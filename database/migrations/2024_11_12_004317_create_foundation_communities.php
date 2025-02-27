@@ -20,6 +20,8 @@ return new class extends Migration
             $table->foreignId('subdistrict_id');
             $table->foreignId('regency_id');
             $table->foreignId('official_id')->nullable();
+            $table->string('citizen')->nullable();
+            $table->string('neighborhood')->nullable();
             $table->jsonb('meta')->nullable();
             $table->softDeletes();
             $table->timestamps();

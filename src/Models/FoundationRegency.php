@@ -29,6 +29,24 @@ class FoundationRegency extends Model
     protected $roles = ['foundation-regency'];
 
     /**
+     * mapStatuses function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapStatuses(Request $request): array
+    {
+        return [
+            'canCreate' => false,
+            'canEdit' => false,
+            'canUpdate' => false,
+            'canDelete' => false,
+            'canRestore' => false,
+            'canDestroy' => false,
+        ];
+    }
+
+    /**
      * The model store method
      *
      * @param Request $request

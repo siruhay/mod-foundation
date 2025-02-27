@@ -9,7 +9,15 @@
 		>
 			<v-card-text>
 				<v-row dense>
-					<v-col cols="12">
+					<v-col
+						:cols="
+							record && record.communitymap_id === 4
+								? 9
+								: record && record.communitymap_id === 5
+								? 6
+								: 12
+						"
+					>
 						<v-combobox
 							:items="communitymaps"
 							:return-object="false"
@@ -17,6 +25,32 @@
 							v-model="record.communitymap_id"
 							hide-details
 						></v-combobox>
+					</v-col>
+
+					<v-col
+						cols="3"
+						v-if="
+							record &&
+							(record.communitymap_id === 4 ||
+								record.communitymap_id === 5)
+						"
+					>
+						<v-text-field
+							label="RW"
+							v-model="record.citizen"
+							hide-details
+						></v-text-field>
+					</v-col>
+
+					<v-col
+						cols="3"
+						v-if="record && record.communitymap_id === 5"
+					>
+						<v-text-field
+							label="RT"
+							v-model="record.neighborhood"
+							hide-details
+						></v-text-field>
 					</v-col>
 
 					<v-col cols="12">

@@ -21,7 +21,8 @@ class FoundationCommunityController extends Controller
         Gate::authorize('view', FoundationCommunity::class);
 
         return new CommunityCollection(
-            FoundationCommunity::applyMode($request->mode)
+            FoundationCommunity::with(['subdistrict', 'village'])
+                ->applyMode($request->mode)
                 ->filter($request->filters)
                 ->search($request->findBy)
                 ->sortBy($request->sortBy)
