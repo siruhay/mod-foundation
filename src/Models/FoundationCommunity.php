@@ -193,6 +193,16 @@ class FoundationCommunity extends Model
     }
 
     /**
+     * communitymap function
+     *
+     * @return HasMany
+     */
+    public function communitymap(): BelongsTo
+    {
+        return $this->belongsTo(FoundationCommunitymap::class, 'communitymap_id');
+    }
+
+    /**
      * Undocumented function
      *
      * @return HasMany
@@ -220,6 +230,16 @@ class FoundationCommunity extends Model
     public function village(): BelongsTo
     {
         return $this->belongsTo(FoundationVillage::class, 'village_id');
+    }
+
+    /**
+     * official function
+     *
+     * @return BelongsTo
+     */
+    public function official(): BelongsTo
+    {
+        return $this->belongsTo(FoundationOfficial::class, 'official_id');
     }
 
     /**

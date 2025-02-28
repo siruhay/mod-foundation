@@ -10,6 +10,7 @@ use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Module\Foundation\Events\TrainingOfficialUpdated;
@@ -104,6 +105,26 @@ class FoundationOfficial extends Model
     public function user(): MorphOne
     {
         return $this->morphOne(SystemUser::class, 'userable');
+    }
+
+    /**
+     * position function
+     *
+     * @return BelongsTo
+     */
+    public function position(): BelongsTo
+    {
+        return $this->belongsTo(FoundationPosition::class, 'position_id');
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return BelongsTo
+     */
+    public function village(): BelongsTo
+    {
+        return $this->belongsTo(FoundationVillage::class, 'village_id');
     }
 
     /**
