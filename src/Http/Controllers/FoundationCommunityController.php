@@ -22,6 +22,7 @@ class FoundationCommunityController extends Controller
 
         return new CommunityCollection(
             FoundationCommunity::with(['subdistrict', 'village'])
+                ->withCount('members')
                 ->applyMode($request->mode)
                 ->filter($request->filters)
                 ->search($request->findBy)

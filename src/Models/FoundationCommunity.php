@@ -143,6 +143,7 @@ class FoundationCommunity extends Model
             ['title' => 'Name', 'value' => 'name'],
             ['title' => 'Kecamatan', 'value' => 'subdistrict'],
             ['title' => 'Desa/Kel', 'value' => 'village'],
+            ['title' => 'Anggota', 'value' => 'members_count'],
             ['title' => 'Updated', 'value' => 'updated_at', 'sortable' => false, 'width' => '170'],
         ];
     }
@@ -167,6 +168,8 @@ class FoundationCommunity extends Model
 
             'citizen' => $model->citizen,
             'neighborhood' => $model->neighborhood,
+
+            'members_count' => $model->members_count,
 
             'subtitle' => (string) $model->updated_at,
             'updated_at' => (string) $model->updated_at,
