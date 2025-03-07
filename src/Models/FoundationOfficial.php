@@ -152,7 +152,9 @@ class FoundationOfficial extends Model
 
             $model->save();
 
-            TrainingOfficialUpdated::dispatch($model);
+            if ($model->slug) {
+                TrainingOfficialUpdated::dispatch($model, []);
+            }
 
             DB::connection($model->connection)->commit();
 
@@ -191,7 +193,9 @@ class FoundationOfficial extends Model
             $model->village_id = $request->village_id;
             $model->save();
 
-            TrainingOfficialUpdated::dispatch($model);
+            if ($model->slug) {
+                TrainingOfficialUpdated::dispatch($model, []);
+            }
 
             DB::connection($model->connection)->commit();
 

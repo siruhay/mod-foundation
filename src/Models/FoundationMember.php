@@ -181,7 +181,13 @@ class FoundationMember extends Model
 
             $parent->members()->save($model);
 
-            TrainingMemberUpdated::dispatch($model);
+            if ($model->slug) {
+                if ($model->position_id === 19) {
+                    TrainingMemberUpdated::dispatch($model, ['myfoundation-chairman']);
+                } else {
+                    TrainingMemberUpdated::dispatch($model, []);
+                }
+            }
 
             DB::connection($model->connection)->commit();
 
@@ -222,7 +228,13 @@ class FoundationMember extends Model
             $model->neighborhood = $request->neighborhood;
             $model->save();
 
-            TrainingMemberUpdated::dispatch($model);
+            if ($model->slug) {
+                if ($model->position_id === 19) {
+                    TrainingMemberUpdated::dispatch($model, ['myfoundation-chairman']);
+                } else {
+                    TrainingMemberUpdated::dispatch($model, []);
+                }
+            }
 
             DB::connection($model->connection)->commit();
 

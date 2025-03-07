@@ -16,5 +16,8 @@ class TrainingMemberUpdated
     /**
      * Create a new event instance.
      */
-    public function __construct(public Model $model) {}
+    public function __construct(public Model $model, public array $abilities)
+    {
+        //
+    }
 }
