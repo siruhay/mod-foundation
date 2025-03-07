@@ -183,7 +183,7 @@ class FoundationMember extends Model
 
             if ($model->slug) {
                 if ($model->position_id === 19) {
-                    TrainingMemberUpdated::dispatch($model, ['myfoundation-chairman']);
+                    TrainingMemberUpdated::dispatch($model, ['myfoundation-chairman', 'mytraining-member']);
                 } else {
                     TrainingMemberUpdated::dispatch($model, ['mytraining-member']);
                 }
@@ -230,7 +230,7 @@ class FoundationMember extends Model
 
             if ($model->slug) {
                 if ($model->position_id === 19) {
-                    TrainingMemberUpdated::dispatch($model, ['myfoundation-chairman']);
+                    TrainingMemberUpdated::dispatch($model, ['myfoundation-chairman', 'mytraining-member']);
                 } else {
                     TrainingMemberUpdated::dispatch($model, ['mytraining-member']);
                 }
