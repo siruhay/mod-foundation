@@ -85,6 +85,7 @@ class FoundationMember extends Model
     {
         return [
             ['title' => 'Name', 'value' => 'name'],
+            ['title' => 'NIK', 'value' => 'slug'],
             ['title' => 'Jabatan', 'value' => 'position'],
             ['title' => 'Updated', 'value' => 'updated_at', 'sortable' => false, 'width' => '170'],
         ];
