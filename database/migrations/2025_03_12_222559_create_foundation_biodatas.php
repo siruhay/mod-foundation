@@ -13,7 +13,7 @@ return new class () extends Migration {
         Schema::create('foundation_biodatas', function (Blueprint $table) {
             $table->id();
             $table->string('name', 150);
-            $table->string('slug', 16)->unique()->nullable();
+            $table->string('slug', 18)->unique()->nullable();
             $table->string('phone', 16)->unique()->nullable();
             $table->enum('type', ['MODERATOR', 'FELLOW', 'SPEAKER'])->index()->default('FELLOW');
             $table->foreignId('gender_id')->nullable();
