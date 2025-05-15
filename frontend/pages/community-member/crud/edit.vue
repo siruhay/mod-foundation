@@ -60,6 +60,15 @@
 							hide-details
 						></v-text-field>
 					</v-col>
+
+					<v-col cols="12">
+						<v-select
+							:items="scopes"
+							label="Bidang Standar Pelayanan Minimal (SPM)"
+							v-model="record.scope"
+							hide-details
+						></v-select>
+					</v-col>
 				</v-row>
 			</v-card-text>
 		</template>
@@ -69,5 +78,20 @@
 <script>
 export default {
 	name: "foundation-member-edit",
+
+	data: () => ({
+		scopes: [
+			{ title: "Non SPM", value: null },
+			{ title: "Pendidikan", value: "PENDIDIKAN" },
+			{ title: "Kesehatan", value: "KESEHATAN" },
+			{ title: "Pekerjaan Umum", value: "PEKERJAAN-UMUM" },
+			{ title: "Perumahan Rakyat", value: "PERUMAHAN-RAKYAT" },
+			{
+				title: "Ketentraman, Ketertiban Umum dan Perlindungan Masyarakat",
+				value: "TRANTIB",
+			},
+			{ title: "Sosial", value: "SOSIAL" },
+		],
+	}),
 };
 </script>

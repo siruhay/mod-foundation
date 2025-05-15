@@ -131,6 +131,7 @@ class FoundationMember extends Model
             'communitymap_id' => $model->communitymap_id,
             'citizen' => $model->citizen,
             'neighborhood' => $model->neighborhood,
+            'scope' => $model->scope,
         ];
     }
 
@@ -179,6 +180,7 @@ class FoundationMember extends Model
             $model->communitymap_id = $parent->communitymap_id;
             $model->citizen = $request->citizen;
             $model->neighborhood = $request->neighborhood;
+            $model->scope = $request->scope;
 
             $parent->members()->save($model);
 
@@ -227,6 +229,7 @@ class FoundationMember extends Model
             $model->communitymap_id = $parent->communitymap_id;
             $model->citizen = $request->citizen;
             $model->neighborhood = $request->neighborhood;
+            $model->scope = $request->scope;
             $model->save();
 
             if ($model->slug) {
