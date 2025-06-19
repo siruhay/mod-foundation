@@ -85,11 +85,12 @@ class OrganizationImport implements ToCollection, WithHeadingRow
                 if ($organization->parent_id) {
                     $parent = FoundationPosition::where('village_id', $workunit->village_id)
                         ->where('workunitable_id', $workunit->id)
+                        ->where('workunitable_type', get_class($workunit))
                         ->where('organization_id', $organization->parent_id)
                         ->first();
                 }
 
-                $model->slug = sha1(str($organization->id . ' ' . $workunit->village_id . ' ' . $workunit->id)->slug());
+                $model->slug = sha1(str($organization->id . ' ' . $workunit->village_id . ' ' . $workunit->slug)->slug());
                 $model->parent_id = $parent ? $parent->id : null;
                 $model->save();
             }
