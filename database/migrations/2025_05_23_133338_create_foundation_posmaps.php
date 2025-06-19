@@ -10,17 +10,11 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('foundation_communities', function (Blueprint $table) {
+        Schema::create('foundation_posmaps', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50)->index();
+            $table->string('name', 100)->index();
             $table->string('slug', 40)->unique();
-            $table->foreignId('communitymap_id');
-            $table->foreignId('village_id');
-            $table->foreignId('subdistrict_id');
-            $table->foreignId('regency_id');
-            $table->foreignId('official_id')->nullable();
-            $table->string('citizen')->nullable();
-            $table->string('neighborhood')->nullable();
+            $table->enum('scope', ['OPD', 'LKD'])->index()->default('OPD');
             $table->jsonb('meta')->nullable();
             $table->softDeletes();
             $table->timestamps();
@@ -32,6 +26,6 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('foundation_communities');
+        Schema::dropIfExists('foundation_posmaps');
     }
 };

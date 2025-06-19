@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,10 +12,13 @@ return new class extends Migration
     {
         Schema::create('foundation_positions', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100)->index();
-            $table->string('slug', 40)->unique();
-            $table->enum('scope', ['OFFICIAL', 'MEMBER'])->index()->default('MEMBER');
+            $table->text('name')->index();
+            $table->text('slug')->unique();
+            $table->foreignId('posmap_id');
+            $table->foreignId('workunit_id');
+            $table->foreignId('officer_id')->nullable();
             $table->jsonb('meta')->nullable();
+            $table->nestedSet();
             $table->softDeletes();
             $table->timestamps();
         });

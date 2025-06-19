@@ -15,13 +15,34 @@ return new class () extends Migration {
             $table->string('name', 150);
             $table->string('slug', 18)->unique()->nullable();
             $table->string('phone', 16)->unique()->nullable();
-            $table->enum('type', ['MODERATOR', 'FELLOW', 'SPEAKER'])->index()->default('FELLOW');
+            $table->enum('kind', ['ASN', 'NON-ASN'])->index()->default('ASN');
+            /**
+             * 'ASN'
+             * 'LKD'
+             * 'OPD'
+             * 'SPEAKER'
+             */
+            $table->string('type')->index()->default('ASN');
+            /**
+             * 'OPERATOR'   =>
+             * 'MEMBER'     =>
+             * 'CHAIRMAN'   =>
+             * 'MODERATOR'  =>
+             * 'FELLOW'     =>
+             * 'SPEAKER'    =>
+             */
+            $table->string('role', 50)->index()->default('FELLOW');
             $table->foreignId('gender_id')->nullable();
             $table->foreignId('faith_id')->nullable();
             $table->foreignId('position_id')->nullable();
+            $table->morphs('workunitable');
+            $table->text('address')->nullable();
             $table->foreignId('village_id')->nullable();
             $table->foreignId('subdistrict_id')->nullable();
             $table->foreignId('regency_id')->nullable();
+            $table->string('citizen')->nullable();
+            $table->string('neighborhood')->nullable();
+            $table->enum('scope', ['PENDIDIKAN', 'KESEHATAN', 'PEKERJAAN-UMUM', 'PERUMAHAN-RAKYAT', 'TRANTIB', 'SOSIAL'])->index()->nullable();
             $table->jsonb('meta')->nullable();
             $table->softDeletes();
             $table->timestamps();

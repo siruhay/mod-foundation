@@ -17,7 +17,9 @@ class MemberImport implements ToCollection, WithHeadingRow
      * @param [type] $command
      * @param string $mode
      */
-    public function __construct(protected $command) {}
+    public function __construct(protected $command)
+    {
+    }
 
     /**
      * @param Collection $rows
