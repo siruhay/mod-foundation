@@ -10,16 +10,12 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('foundation_positions', function (Blueprint $table) {
+        Schema::create('foundation_organizations', function (Blueprint $table) {
             $table->id();
-            $table->text('name')->index();
-            $table->text('slug')->unique();
-            $table->foreignId('posmap_id');
-            $table->foreignId('village_id');
-            // $table->foreignId('workunit_id');
-            $table->morphs('workunitable');
-            $table->foreignId('organization_id');
-            $table->foreignId('officer_id')->nullable();
+            $table->string('name')->index();
+            $table->string('slug', 40)->unique();
+            $table->foreignId('posmap_id')->nullable();
+            $table->enum('scope', ['OPD', 'UPT', 'KECAMATAN', 'KELURAHAN', 'DESA', 'LKD'])->index()->default('OPD');
             $table->jsonb('meta')->nullable();
             $table->nestedSet();
             $table->softDeletes();
@@ -32,6 +28,6 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('foundation_positions');
+        Schema::dropIfExists('foundation_organizations');
     }
 };

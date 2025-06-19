@@ -5,9 +5,9 @@ namespace Module\Foundation\Imports;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Module\Foundation\Models\FoundationCommunitymap;
+use Module\Foundation\Models\FoundationPosmap;
 
-class CommunitymapImport implements ToCollection, WithHeadingRow
+class PosmapImport implements ToCollection, WithHeadingRow
 {
     /**
      * The construct function
@@ -20,11 +20,11 @@ class CommunitymapImport implements ToCollection, WithHeadingRow
     }
 
     /**
-     * @param Collection $rows
-     */
+    * @param Collection $rows
+    */
     public function collection(Collection $rows)
     {
-        $this->command->info('foundation:communitymap_table');
+        $this->command->info('foundation:posmaps_table');
         $this->command->getOutput()->progressStart(count($rows));
 
         foreach ($rows as $row) {
@@ -33,10 +33,10 @@ class CommunitymapImport implements ToCollection, WithHeadingRow
             $record = (object) $row->toArray();
 
             /** CREATE NEW RECORD */
-            $model = new FoundationCommunitymap();
+            $model = new FoundationPosmap();
             $model->name = $record->name;
-            $model->slug = sha1(str($record->name)->slug());
-            $model->short = $record->short;
+            $model->slug = sha1(str($record->name . ' ' . $record->scope)->slug());
+            $model->scope = $record->scope;
             $model->save();
         }
 

@@ -53,10 +53,12 @@ class DataImport implements WithMultipleSheets, WithChunkReading
         }
 
         return [
-            'positions' => new PositionImport($this->command),
+            'workunits' => new WorkunitImport($this->command),
             'communitymaps' => new CommunitymapImport($this->command),
-            'members' => new MemberImport($this->command),
-            'officials' => new OfficialImport($this->command),
+            'posmaps' => new PosmapImport($this->command),
+            'organizations' => new OrganizationImport($this->command),
+            // 'members' => new MemberImport($this->command),
+            // 'officials' => new OfficialImport($this->command),
         ];
     }
 }

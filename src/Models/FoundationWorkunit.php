@@ -3,6 +3,7 @@
 namespace Module\Foundation\Models;
 
 use Illuminate\Http\Request;
+use Kalnoy\Nestedset\NodeTrait;
 use Module\System\Traits\HasMeta;
 use Illuminate\Support\Facades\DB;
 use Module\System\Traits\Filterable;
@@ -17,6 +18,7 @@ class FoundationWorkunit extends Model
     use Filterable;
     use HasMeta;
     use HasPageSetup;
+    use NodeTrait;
     use Searchable;
     use SoftDeletes;
 
