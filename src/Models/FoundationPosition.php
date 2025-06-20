@@ -10,6 +10,7 @@ use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Module\Foundation\Http\Resources\PositionResource;
 
@@ -57,7 +58,7 @@ class FoundationPosition extends Model
      *
      * @var string
      */
-    protected $defaultOrder = 'name';
+    protected $defaultOrder = '_lft';
 
     /**
      * mapHeaders function
@@ -78,7 +79,7 @@ class FoundationPosition extends Model
     {
         return [
             ['title' => 'Name', 'value' => 'name'],
-            ['title' => 'Scope', 'value' => 'scope'],
+            ['title' => 'Officer', 'value' => 'officer_name'],
             ['title' => 'Updated', 'value' => 'updated_at', 'sortable' => false, 'width' => '170'],
         ];
     }
@@ -95,6 +96,7 @@ class FoundationPosition extends Model
             'id' => $model->id,
             'name' => $model->name,
             'scope' => $model->scope,
+            'officer_name' => optional($model->officer)->name,
 
             'subtitle' => (string) $model->updated_at,
             'updated_at' => (string) $model->updated_at,
@@ -110,6 +112,16 @@ class FoundationPosition extends Model
     public static function mapResourceShow(Request $request, $model): array
     {
         return static::mapResource($request, $model);
+    }
+
+    /**
+     * officer function
+     *
+     * @return BelongsTo
+     */
+    public function officer(): BelongsTo
+    {
+        return $this->belongsTo(FoundationOfficial::class, 'officer_id');
     }
 
     /**

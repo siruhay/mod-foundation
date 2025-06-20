@@ -32,7 +32,7 @@ class FoundationOfficial extends FoundationBiodata
     {
         return [
             'genders' => FoundationGender::forCombo(),
-            'positions' => FoundationPosition::where('scope', 'OFFICIAL')->forCombo(),
+            // 'positions' => FoundationPosition::where('scope', 'OFFICIAL')->forCombo(),
             'subdistricts' => FoundationSubdistrict::where('regency_id', 3)->forCombo(),
             'villages' => optional($model)->subdistrict_id ? FoundationVillage::where('district_id', $model->subdistrict_id)->forCombo() : [],
         ];

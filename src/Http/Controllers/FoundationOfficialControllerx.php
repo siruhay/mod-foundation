@@ -6,30 +6,25 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use Module\Foundation\Models\FoundationOfficial;
-use Module\Foundation\Models\FoundationWorkunit;
 use Module\Foundation\Http\Resources\OfficialCollection;
 use Module\Foundation\Http\Resources\OfficialShowResource;
 
-class FoundationOfficialController extends Controller
+class FoundationOfficialControllerx extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, FoundationWorkunit $foundationWorkunit)
+    public function index(Request $request)
     {
         Gate::authorize('view', FoundationOfficial::class);
 
         return new OfficialCollection(
-            $foundationWorkunit
-                ->officials()
-                ->with(['position'])
-                ->applyMode($request->mode)
+            FoundationOfficial::applyMode($request->mode)
                 ->filter($request->filters)
                 ->search($request->findBy)
-                ->sortBy($request->sortBy, $request->sortDesc)
+                ->sortBy($request->sortBy)
                 ->paginate($request->itemsPerPage)
         );
     }
@@ -38,26 +33,26 @@ class FoundationOfficialController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, FoundationWorkunit $foundationWorkunit)
+    public function store(Request $request)
     {
         Gate::authorize('create', FoundationOfficial::class);
 
-        $request->validate([]);
+        $request->validate([
+            'slug' => 'required|min_digits:16|numeric'
+        ]);
 
-        return FoundationOfficial::storeRecord($request, $foundationWorkunit);
+        return FoundationOfficial::storeRecord($request);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
      * @param  \Module\Foundation\Models\FoundationOfficial $foundationOfficial
      * @return \Illuminate\Http\Response
      */
-    public function show(FoundationWorkunit $foundationWorkunit, FoundationOfficial $foundationOfficial)
+    public function show(FoundationOfficial $foundationOfficial)
     {
         Gate::authorize('show', $foundationOfficial);
 
@@ -68,11 +63,10 @@ class FoundationOfficialController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
      * @param  \Module\Foundation\Models\FoundationOfficial $foundationOfficial
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FoundationWorkunit $foundationWorkunit, FoundationOfficial $foundationOfficial)
+    public function update(Request $request, FoundationOfficial $foundationOfficial)
     {
         Gate::authorize('update', $foundationOfficial);
 
@@ -84,11 +78,10 @@ class FoundationOfficialController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
      * @param  \Module\Foundation\Models\FoundationOfficial $foundationOfficial
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FoundationWorkunit $foundationWorkunit, FoundationOfficial $foundationOfficial)
+    public function destroy(FoundationOfficial $foundationOfficial)
     {
         Gate::authorize('delete', $foundationOfficial);
 
@@ -101,7 +94,7 @@ class FoundationOfficialController extends Controller
      * @param  \Module\Foundation\Models\FoundationOfficial $foundationOfficial
      * @return \Illuminate\Http\Response
      */
-    public function restore(FoundationWorkunit $foundationWorkunit, FoundationOfficial $foundationOfficial)
+    public function restore(FoundationOfficial $foundationOfficial)
     {
         Gate::authorize('restore', $foundationOfficial);
 
@@ -114,7 +107,7 @@ class FoundationOfficialController extends Controller
      * @param  \Module\Foundation\Models\FoundationOfficial $foundationOfficial
      * @return \Illuminate\Http\Response
      */
-    public function forceDelete(FoundationWorkunit $foundationWorkunit, FoundationOfficial $foundationOfficial)
+    public function forceDelete(FoundationOfficial $foundationOfficial)
     {
         Gate::authorize('destroy', $foundationOfficial);
 

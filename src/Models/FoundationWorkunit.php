@@ -10,6 +10,8 @@ use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Module\Foundation\Http\Resources\WorkunitResource;
 
@@ -57,7 +59,71 @@ class FoundationWorkunit extends Model
      *
      * @var string
      */
-    protected $defaultOrder = 'name';
+    protected $defaultOrder = '_lft';
+
+    /**
+     * mapResource function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResource(Request $request, $model): array
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+
+            'subtitle' => (string) $model->updated_at,
+            'updated_at' => (string) $model->updated_at,
+        ];
+    }
+
+    /**
+     * mapResourceShow function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResourceShow(Request $request, $model): array
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+            'slug' => $model->slug,
+            'scope' => $model->scope,
+            'village_id' => $model->village_id,
+        ];
+    }
+
+    /**
+     * communities function
+     *
+     * @return HasMany
+     */
+    public function communities(): HasMany
+    {
+        return $this->hasMany(FoundationCommunity::class, 'workunit_id');
+    }
+
+    /**
+     * officials function
+     *
+     * @return MorphMany
+     */
+    public function officials(): MorphMany
+    {
+        return $this->morphMany(FoundationOfficial::class, 'workunitable');
+    }
+
+    /**
+     * positions function
+     *
+     * @return MorphMany
+     */
+    public function positions(): MorphMany
+    {
+        return $this->morphMany(FoundationPosition::class, 'workunitable');
+    }
 
     /**
      * The model store method

@@ -5,12 +5,12 @@ namespace Module\Foundation\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
-use Module\Foundation\Models\FoundationOfficial;
+use Module\Foundation\Models\FoundationPosition;
 use Module\Foundation\Models\FoundationWorkunit;
-use Module\Foundation\Http\Resources\OfficialCollection;
-use Module\Foundation\Http\Resources\OfficialShowResource;
+use Module\Foundation\Http\Resources\PositionCollection;
+use Module\Foundation\Http\Resources\PositionShowResource;
 
-class FoundationOfficialController extends Controller
+class FoundationWorkunitposController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,12 +20,12 @@ class FoundationOfficialController extends Controller
      */
     public function index(Request $request, FoundationWorkunit $foundationWorkunit)
     {
-        Gate::authorize('view', FoundationOfficial::class);
+        Gate::authorize('view', FoundationPosition::class);
 
-        return new OfficialCollection(
+        return new PositionCollection(
             $foundationWorkunit
-                ->officials()
-                ->with(['position'])
+                ->positions()
+                ->with(['officer'])
                 ->applyMode($request->mode)
                 ->filter($request->filters)
                 ->search($request->findBy)
@@ -43,25 +43,25 @@ class FoundationOfficialController extends Controller
      */
     public function store(Request $request, FoundationWorkunit $foundationWorkunit)
     {
-        Gate::authorize('create', FoundationOfficial::class);
+        Gate::authorize('create', FoundationPosition::class);
 
         $request->validate([]);
 
-        return FoundationOfficial::storeRecord($request, $foundationWorkunit);
+        return FoundationPosition::storeRecord($request, $foundationWorkunit);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
-     * @param  \Module\Foundation\Models\FoundationOfficial $foundationOfficial
+     * @param  \Module\Foundation\Models\FoundationPosition $foundationPosition
      * @return \Illuminate\Http\Response
      */
-    public function show(FoundationWorkunit $foundationWorkunit, FoundationOfficial $foundationOfficial)
+    public function show(FoundationWorkunit $foundationWorkunit, FoundationPosition $foundationPosition)
     {
-        Gate::authorize('show', $foundationOfficial);
+        Gate::authorize('show', $foundationPosition);
 
-        return new OfficialShowResource($foundationOfficial);
+        return new PositionShowResource($foundationPosition);
     }
 
     /**
@@ -69,55 +69,55 @@ class FoundationOfficialController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
-     * @param  \Module\Foundation\Models\FoundationOfficial $foundationOfficial
+     * @param  \Module\Foundation\Models\FoundationPosition $foundationPosition
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FoundationWorkunit $foundationWorkunit, FoundationOfficial $foundationOfficial)
+    public function update(Request $request, FoundationWorkunit $foundationWorkunit, FoundationPosition $foundationPosition)
     {
-        Gate::authorize('update', $foundationOfficial);
+        Gate::authorize('update', $foundationPosition);
 
         $request->validate([]);
 
-        return FoundationOfficial::updateRecord($request, $foundationOfficial);
+        return FoundationPosition::updateRecord($request, $foundationPosition);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
-     * @param  \Module\Foundation\Models\FoundationOfficial $foundationOfficial
+     * @param  \Module\Foundation\Models\FoundationPosition $foundationPosition
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FoundationWorkunit $foundationWorkunit, FoundationOfficial $foundationOfficial)
+    public function destroy(FoundationWorkunit $foundationWorkunit, FoundationPosition $foundationPosition)
     {
-        Gate::authorize('delete', $foundationOfficial);
+        Gate::authorize('delete', $foundationPosition);
 
-        return FoundationOfficial::deleteRecord($foundationOfficial);
+        return FoundationPosition::deleteRecord($foundationPosition);
     }
 
     /**
      * Restore the specified resource from soft-delete.
      *
-     * @param  \Module\Foundation\Models\FoundationOfficial $foundationOfficial
+     * @param  \Module\Foundation\Models\FoundationPosition $foundationPosition
      * @return \Illuminate\Http\Response
      */
-    public function restore(FoundationWorkunit $foundationWorkunit, FoundationOfficial $foundationOfficial)
+    public function restore(FoundationWorkunit $foundationWorkunit, FoundationPosition $foundationPosition)
     {
-        Gate::authorize('restore', $foundationOfficial);
+        Gate::authorize('restore', $foundationPosition);
 
-        return FoundationOfficial::restoreRecord($foundationOfficial);
+        return FoundationPosition::restoreRecord($foundationPosition);
     }
 
     /**
      * Force Delete the specified resource from soft-delete.
      *
-     * @param  \Module\Foundation\Models\FoundationOfficial $foundationOfficial
+     * @param  \Module\Foundation\Models\FoundationPosition $foundationPosition
      * @return \Illuminate\Http\Response
      */
-    public function forceDelete(FoundationWorkunit $foundationWorkunit, FoundationOfficial $foundationOfficial)
+    public function forceDelete(FoundationWorkunit $foundationWorkunit, FoundationPosition $foundationPosition)
     {
-        Gate::authorize('destroy', $foundationOfficial);
+        Gate::authorize('destroy', $foundationPosition);
 
-        return FoundationOfficial::destroyRecord($foundationOfficial);
+        return FoundationPosition::destroyRecord($foundationPosition);
     }
 }

@@ -5,31 +5,28 @@ namespace Module\Foundation\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
-use Module\Foundation\Models\FoundationWorkunit;
 use Module\Foundation\Models\FoundationCommunity;
 use Module\Foundation\Http\Resources\CommunityCollection;
 use Module\Foundation\Http\Resources\CommunityShowResource;
 
-class FoundationCommunityController extends Controller
+class FoundationCommunityxController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, FoundationWorkunit $foundationWorkunit)
+    public function index(Request $request)
     {
         Gate::authorize('view', FoundationCommunity::class);
 
         return new CommunityCollection(
-            $foundationWorkunit
-                ->communities()
-                ->with(['subdistrict', 'village'])
+            FoundationCommunity::with(['subdistrict', 'village'])
+                ->withCount('members')
                 ->applyMode($request->mode)
                 ->filter($request->filters)
                 ->search($request->findBy)
-                ->sortBy($request->sortBy, $request->sortDesc)
+                ->sortBy($request->sortBy)
                 ->paginate($request->itemsPerPage)
         );
     }
@@ -38,26 +35,24 @@ class FoundationCommunityController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, FoundationWorkunit $foundationWorkunit)
+    public function store(Request $request)
     {
         Gate::authorize('create', FoundationCommunity::class);
 
         $request->validate([]);
 
-        return FoundationCommunity::storeRecord($request, $foundationWorkunit);
+        return FoundationCommunity::storeRecord($request);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
      * @param  \Module\Foundation\Models\FoundationCommunity $foundationCommunity
      * @return \Illuminate\Http\Response
      */
-    public function show(FoundationWorkunit $foundationWorkunit, FoundationCommunity $foundationCommunity)
+    public function show(FoundationCommunity $foundationCommunity)
     {
         Gate::authorize('show', $foundationCommunity);
 
@@ -68,11 +63,10 @@ class FoundationCommunityController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
      * @param  \Module\Foundation\Models\FoundationCommunity $foundationCommunity
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FoundationWorkunit $foundationWorkunit, FoundationCommunity $foundationCommunity)
+    public function update(Request $request, FoundationCommunity $foundationCommunity)
     {
         Gate::authorize('update', $foundationCommunity);
 
@@ -84,11 +78,10 @@ class FoundationCommunityController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
      * @param  \Module\Foundation\Models\FoundationCommunity $foundationCommunity
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FoundationWorkunit $foundationWorkunit, FoundationCommunity $foundationCommunity)
+    public function destroy(FoundationCommunity $foundationCommunity)
     {
         Gate::authorize('delete', $foundationCommunity);
 
@@ -101,7 +94,7 @@ class FoundationCommunityController extends Controller
      * @param  \Module\Foundation\Models\FoundationCommunity $foundationCommunity
      * @return \Illuminate\Http\Response
      */
-    public function restore(FoundationWorkunit $foundationWorkunit, FoundationCommunity $foundationCommunity)
+    public function restore(FoundationCommunity $foundationCommunity)
     {
         Gate::authorize('restore', $foundationCommunity);
 
@@ -114,7 +107,7 @@ class FoundationCommunityController extends Controller
      * @param  \Module\Foundation\Models\FoundationCommunity $foundationCommunity
      * @return \Illuminate\Http\Response
      */
-    public function forceDelete(FoundationWorkunit $foundationWorkunit, FoundationCommunity $foundationCommunity)
+    public function forceDelete(FoundationCommunity $foundationCommunity)
     {
         Gate::authorize('destroy', $foundationCommunity);
 
