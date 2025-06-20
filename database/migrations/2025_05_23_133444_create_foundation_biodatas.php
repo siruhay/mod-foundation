@@ -11,27 +11,33 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('foundation_biodatas', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 150);
-            $table->string('slug', 18)->unique()->nullable();
-            $table->string('phone', 16)->unique()->nullable();
-            $table->enum('kind', ['ASN', 'NON-ASN'])->index()->default('ASN');
             /**
+             * type
+             * =====
              * 'ASN'
              * 'LKD'
              * 'OPD'
              * 'SPEAKER'
              */
-            $table->string('type')->index()->default('ASN');
+
             /**
-             * 'OPERATOR'   =>
-             * 'MEMBER'     =>
-             * 'CHAIRMAN'   =>
-             * 'MODERATOR'  =>
-             * 'FELLOW'     =>
-             * 'SPEAKER'    =>
-             */
-            $table->string('role', 50)->index()->default('FELLOW');
+            * role
+            * =====
+            * 'OPERATOR'   =>
+            * 'MEMBER'     =>
+            * 'CHAIRMAN'   =>
+            * 'MODERATOR'  =>
+            * 'FELLOW'     =>
+            * 'SPEAKER'    =>
+            */
+
+            $table->id();
+            $table->string('name', 150);
+            $table->string('slug', 18)->unique()->nullable();
+            $table->string('phone', 16)->unique()->nullable();
+            $table->enum('kind', ['ASN', 'NON-ASN'])->index()->default('ASN');
+            $table->string('type')->index()->default('ASN');
+            $table->string('role', 50)->index()->default('MEMBER');
             $table->foreignId('gender_id')->nullable();
             $table->foreignId('faith_id')->nullable();
             $table->foreignId('position_id')->nullable();

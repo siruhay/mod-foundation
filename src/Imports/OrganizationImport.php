@@ -41,6 +41,7 @@ class OrganizationImport implements ToCollection, WithHeadingRow
             $model->scope = $record->scope;
             $model->posmap_id = $record->posmap_id;
             $model->parent_id = $record->parent_id;
+            $model->position_type = $record->position_type;
             $model->save();
         }
 
@@ -67,6 +68,7 @@ class OrganizationImport implements ToCollection, WithHeadingRow
                 $model->workunitable_id = $workunit->id;
                 $model->workunitable_type = get_class($workunit);
                 $model->organization_id = $organization->id;
+                $model->position_type = $organization->position_type;
 
                 if ($workunit->scope === 'KELURAHAN') {
                     switch ($organization->posmap_id) {

@@ -5,6 +5,7 @@ namespace Module\Foundation\Imports;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Module\Foundation\Models\FoundationBiodata;
 use Module\Foundation\Models\FoundationMember;
 use Module\Foundation\Models\FoundationVillage;
 use Module\Foundation\Models\FoundationPosition;
@@ -102,6 +103,7 @@ class MemberImport implements ToCollection, WithHeadingRow
                     $model->workunitable_id = $community->id;
                     $model->workunitable_type = get_class($community);
                     $model->organization_id = $organization->id;
+                    $model->position_type = $organization->position_type;
 
                     if ($workunit->scope === 'KELURAHAN') {
                         switch ($organization->posmap_id) {
@@ -132,28 +134,48 @@ class MemberImport implements ToCollection, WithHeadingRow
             }
 
             /** CREATE NEW RECORD */
-            // $model = FoundationMember::firstWhere('phone', $record->handphone);
+            $model = FoundationBiodata::firstWhere('phone', $record->handphone);
 
-            // if ($record->handphone && !$model) {
-            //     $model = new FoundationMember();
-            //     $model->name = $record->name;
-            //     $model->phone = $record->handphone;
-            //     $model->gender_id = $record->gender_id;
-            //     $model->position_id = $record->position_id;
-            //     $model->village_id = optional($village)->id;
-            //     $model->subdistrict_id = optional($village)->district_id;
-            //     $model->regency_id = optional($village)->regency_id;
-            //     $model->community_id = optional($community)->id;
-            //     $model->communitymap_id = $maps;
-            //     $model->citizen = $record->citizen ? str_pad($record->citizen, 2, "0", STR_PAD_LEFT) : null;
-            //     $model->neighborhood = $record->neighborhood ? str_pad($record->neighborhood, 3, "0", STR_PAD_LEFT) : null;
-            //     $model->save();
+            if ($record->handphone && !$model) {
+                $model = new FoundationBiodata();
+                $model->name = $record->name;
+                $model->phone = $record->handphone;
+                $model->kind = 'NON-ASN';
+                $model->type = 'LKD';
+                $model->gender_id = $record->gender_id;
+                $model->village_id = optional($village)->id;
+                $model->subdistrict_id = optional($village)->district_id;
+                $model->regency_id = optional($village)->regency_id;
+                $model->community_id = optional($community)->id;
+                $model->communitymap_id = $maps;
+                $model->citizen = $record->citizen ? str_pad($record->citizen, 2, "0", STR_PAD_LEFT) : null;
+                $model->neighborhood = $record->neighborhood ? str_pad($record->neighborhood, 3, "0", STR_PAD_LEFT) : null;
+                $model->workunitable_type = get_class($community);
+                $model->workunitable_id = $community->id;
 
-            //     if ($model->position_id === 19) {
-            //         $community->official_id = $model->id;
-            //         $community->save();
-            //     }
-            // }
+                if ($position = FoundationPosition::where('workunitable_type', get_class($community))
+                    ->where('workunitable_id', $community->id)
+                    ->where('organization_id', $record->position_id)
+                    ->first()) {
+                    $model->position_id = $position->id;
+
+                    if ($position->id === 19) {
+                        $model->role = 'CHAIRMAN';
+                    }
+                }
+
+                $model->save();
+
+                if ($position && $position->position_type === 'STRUCTURAL') {
+                    $position->officer_id = $model->id;
+                    $position->save();
+                }
+
+                if ($model->position_id === 19) {
+                    $community->officer_id = $model->id;
+                    $community->save();
+                }
+            }
         }
 
         $this->command->getOutput()->progressFinish();

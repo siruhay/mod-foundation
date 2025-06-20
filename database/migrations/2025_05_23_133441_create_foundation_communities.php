@@ -19,7 +19,7 @@ return new class () extends Migration {
             $table->foreignId('village_id');
             $table->foreignId('subdistrict_id');
             $table->foreignId('regency_id');
-            $table->foreignId('official_id')->nullable();
+            $table->foreignId('officer_id')->nullable();
             $table->string('citizen')->nullable();
             $table->string('neighborhood')->nullable();
             $table->jsonb('meta')->nullable();

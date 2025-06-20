@@ -16,10 +16,10 @@ return new class () extends Migration {
             $table->text('slug')->unique();
             $table->foreignId('posmap_id');
             $table->foreignId('village_id');
-            // $table->foreignId('workunit_id');
             $table->morphs('workunitable');
             $table->foreignId('organization_id');
             $table->foreignId('officer_id')->nullable();
+            $table->enum('position_type', ['STRUCTURAL', 'FUNCTIONAL', 'EXECUTOR'])->default('EXECUTOR');
             $table->jsonb('meta')->nullable();
             $table->nestedSet();
             $table->softDeletes();
