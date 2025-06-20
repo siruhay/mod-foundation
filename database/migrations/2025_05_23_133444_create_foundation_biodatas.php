@@ -37,7 +37,7 @@ return new class () extends Migration {
             $table->string('phone', 16)->unique()->nullable();
             $table->enum('kind', ['ASN', 'NON-ASN'])->index()->default('ASN');
             $table->string('type')->index()->default('ASN');
-            $table->string('role', 50)->index()->default('MEMBER');
+            $table->string('role', 50)->index()->nullable();
             $table->foreignId('gender_id')->nullable();
             $table->foreignId('faith_id')->nullable();
             $table->foreignId('position_id')->nullable();

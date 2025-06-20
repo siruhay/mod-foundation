@@ -161,6 +161,8 @@ class MemberImport implements ToCollection, WithHeadingRow
 
                     if ($position->id === 19) {
                         $model->role = 'CHAIRMAN';
+                    } else {
+                        $model->role = 'MEMBER';
                     }
                 }
 

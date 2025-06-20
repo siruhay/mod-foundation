@@ -58,7 +58,7 @@ class DataImport implements WithMultipleSheets, WithChunkReading
             'posmaps' => new PosmapImport($this->command),
             'organizations' => new OrganizationImport($this->command),
             'members' => new MemberImport($this->command),
-            // 'officials' => new OfficialImport($this->command),
+            'officials' => new OfficialImport($this->command),
         ];
     }
 }
