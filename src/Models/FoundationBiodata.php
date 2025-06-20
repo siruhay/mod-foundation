@@ -5,11 +5,15 @@ namespace Module\Foundation\Models;
 use Illuminate\Http\Request;
 use Module\System\Traits\HasMeta;
 use Illuminate\Support\Facades\DB;
+use Module\System\Models\SystemUser;
 use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Module\Foundation\Http\Resources\BiodataResource;
 
 class FoundationBiodata extends Model
@@ -58,12 +62,92 @@ class FoundationBiodata extends Model
     protected $defaultOrder = 'name';
 
     /**
+     * gender function
+     *
+     * @return BelongsTo
+     */
+    public function gender(): BelongsTo
+    {
+        return $this->belongsTo(FoundationGender::class, 'gender_id');
+    }
+
+    /**
+     * faith function
+     *
+     * @return BelongsTo
+     */
+    public function faith(): BelongsTo
+    {
+        return $this->belongsTo(FoundationFaith::class, 'faith_id');
+    }
+
+    /**
+     * position function
+     *
+     * @return BelongsTo
+     */
+    public function position(): BelongsTo
+    {
+        return $this->belongsTo(FoundationPosition::class, 'position_id');
+    }
+
+    /**
+     * regency function
+     *
+     * @return BelongsTo
+     */
+    public function regency(): BelongsTo
+    {
+        return $this->belongsTo(FoundationRegency::class, 'regency_id');
+    }
+
+    /**
+     * subdistrict function
+     *
+     * @return BelongsTo
+     */
+    public function subdistrict(): BelongsTo
+    {
+        return $this->belongsTo(FoundationSubdistrict::class, 'subdistrict_id');
+    }
+
+    /**
+     * user function
+     *
+     * @return MorphOne
+     */
+    public function user(): MorphOne
+    {
+        return $this->morphOne(SystemUser::class, 'userable');
+    }
+
+    /**
+     * village function
+     *
+     * @return BelongsTo
+     */
+    public function village(): BelongsTo
+    {
+        return $this->belongsTo(FoundationVillage::class, 'village_id');
+    }
+
+    /**
+     * workunitable function
+     *
+     * @return MorphTo
+     */
+    public function workunitable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    /**
      * The model store method
      *
      * @param Request $request
      * @return void
      */
-    public static function storeRecord(Request $request)
+    public static function storeRecord(Request $request, $parent)
     {
         $model = new static();
 
@@ -93,7 +177,7 @@ class FoundationBiodata extends Model
      * @param [type] $model
      * @return void
      */
-    public static function updateRecord(Request $request, $model)
+    public static function updateRecord(Request $request, $model, $parent)
     {
         DB::connection($model->connection)->beginTransaction();
 

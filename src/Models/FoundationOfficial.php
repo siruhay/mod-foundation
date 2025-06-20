@@ -3,63 +3,24 @@
 namespace Module\Foundation\Models;
 
 use Illuminate\Http\Request;
-use Module\System\Traits\HasMeta;
 use Illuminate\Support\Facades\DB;
-use Module\System\Models\SystemUser;
-use Module\System\Traits\Filterable;
-use Module\System\Traits\Searchable;
-use Module\System\Traits\HasPageSetup;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Builder;
 use Module\Foundation\Events\TrainingOfficialUpdated;
 use Module\Foundation\Http\Resources\OfficialResource;
 
-class FoundationOfficial extends Model
+class FoundationOfficial extends FoundationBiodata
 {
-    use Filterable;
-    use HasMeta;
-    use HasPageSetup;
-    use Searchable;
-    use SoftDeletes;
-
     /**
-     * The connection name for the model.
+     * addGlobalScope function
      *
-     * @var string|null
+     * @return void
      */
-    protected $connection = 'platform';
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'foundation_officials';
-
-    /**
-     * The roles variable
-     *
-     * @var array
-     */
-    protected $roles = ['foundation-official'];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'meta' => 'array'
-    ];
-
-    /**
-     * The default key for the order.
-     *
-     * @var string
-     */
-    protected $defaultOrder = 'name';
+    protected static function booted(): void
+    {
+        static::addGlobalScope('official', function (Builder $builder) {
+            $builder->where('type', 'DESA');
+        });
+    }
 
     /**
      * mapCombos function
@@ -98,42 +59,12 @@ class FoundationOfficial extends Model
     }
 
     /**
-     * user function
-     *
-     * @return MorphOne
-     */
-    public function user(): MorphOne
-    {
-        return $this->morphOne(SystemUser::class, 'userable');
-    }
-
-    /**
-     * position function
-     *
-     * @return BelongsTo
-     */
-    public function position(): BelongsTo
-    {
-        return $this->belongsTo(FoundationPosition::class, 'position_id');
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return BelongsTo
-     */
-    public function village(): BelongsTo
-    {
-        return $this->belongsTo(FoundationVillage::class, 'village_id');
-    }
-
-    /**
      * The model store method
      *
      * @param Request $request
      * @return void
      */
-    public static function storeRecord(Request $request)
+    public static function storeRecord(Request $request, $parent = null)
     {
         $model          = new static();
         $village        = FoundationVillage::find($request->village_id);
@@ -176,7 +107,7 @@ class FoundationOfficial extends Model
      * @param [type] $model
      * @return void
      */
-    public static function updateRecord(Request $request, $model)
+    public static function updateRecord(Request $request, $model, $parent = null)
     {
         $village        = FoundationVillage::find($request->village_id);
 

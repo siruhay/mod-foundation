@@ -3,63 +3,24 @@
 namespace Module\Foundation\Models;
 
 use Illuminate\Http\Request;
-use Module\System\Traits\HasMeta;
 use Illuminate\Support\Facades\DB;
-use Module\System\Models\SystemUser;
-use Module\System\Traits\Filterable;
-use Module\System\Traits\Searchable;
-use Module\System\Traits\HasPageSetup;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 use Module\Foundation\Events\TrainingMemberUpdated;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Module\Foundation\Http\Resources\MemberResource;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class FoundationMember extends Model
+class FoundationMember extends FoundationBiodata
 {
-    use Filterable;
-    use HasMeta;
-    use HasPageSetup;
-    use Searchable;
-    use SoftDeletes;
-
     /**
-     * The connection name for the model.
+     * addGlobalScope function
      *
-     * @var string|null
+     * @return void
      */
-    protected $connection = 'platform';
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'foundation_members';
-
-    /**
-     * The roles variable
-     *
-     * @var array
-     */
-    protected $roles = ['foundation-member'];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'meta' => 'array'
-    ];
-
-    /**
-     * The default key for the order.
-     *
-     * @var string
-     */
-    protected $defaultOrder = 'name';
+    protected static function booted(): void
+    {
+        static::addGlobalScope('official', function (Builder $builder) {
+            $builder->where('type', 'LKD');
+        });
+    }
 
     /**
      * mapCombos function
@@ -67,7 +28,7 @@ class FoundationMember extends Model
      * @param Request $request
      * @return array
      */
-    public static function mapCombos(Request $request): array
+    public static function mapCombos(Request $request, $model = null): array
     {
         return [
             'genders' => FoundationGender::forCombo(),
@@ -133,26 +94,6 @@ class FoundationMember extends Model
             'neighborhood' => $model->neighborhood,
             'scope' => $model->scope,
         ];
-    }
-
-    /**
-     * user function
-     *
-     * @return MorphOne
-     */
-    public function user(): MorphOne
-    {
-        return $this->morphOne(SystemUser::class, 'userable');
-    }
-
-    /**
-     * position function
-     *
-     * @return BelongsTo
-     */
-    public function position(): BelongsTo
-    {
-        return $this->belongsTo(FoundationPosition::class, 'position_id');
     }
 
     /**
