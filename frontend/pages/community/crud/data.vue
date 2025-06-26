@@ -1,5 +1,5 @@
 <template>
-	<form-data>
+	<form-data hide-addnew>
 		<template v-slot:forminfo></template>
 
 		<template v-slot:helpdesk></template>

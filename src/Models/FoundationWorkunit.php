@@ -10,9 +10,10 @@ use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Module\Foundation\Http\Resources\WorkunitResource;
 
 class FoundationWorkunit extends Model
@@ -62,6 +63,39 @@ class FoundationWorkunit extends Model
     protected $defaultOrder = '_lft';
 
     /**
+     * mapCombos function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapCombos(Request $request, $model = null): array
+    {
+        return [
+            'parents' => FoundationWorkunit::whereNull('parent_id')->forCombo(),
+            'subdistricts' => FoundationSubdistrict::forCombo(),
+            'villages' => $model ? FoundationVillage::where('district_id', optional($model->village)->district_id)->forCombo() : []
+        ];
+    }
+
+    /**
+     * mapRecordBase function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapRecordBase(Request $request): array
+    {
+        return [
+            'id' => null,
+            'name' => null,
+            'scope' => null,
+            'subdistrict_id' => null,
+            'village_id' => null,
+            'parent_id' => null
+        ];
+    }
+
+    /**
      * mapResource function
      *
      * @param Request $request
@@ -94,6 +128,8 @@ class FoundationWorkunit extends Model
             'name' => $model->name,
             'slug' => $model->slug,
             'scope' => $model->scope,
+            'parent_id' => $model->parent_id,
+            'subdistrict_id' => optional($model->village)->district_id,
             'village_id' => $model->village_id,
         ];
     }
@@ -126,6 +162,16 @@ class FoundationWorkunit extends Model
     public function positions(): MorphMany
     {
         return $this->morphMany(FoundationPosition::class, 'workunitable');
+    }
+
+    /**
+     * village function
+     *
+     * @return BelongsTo
+     */
+    public function village(): BelongsTo
+    {
+        return $this->belongsTo(FoundationVillage::class, 'village_id');
     }
 
     /**
