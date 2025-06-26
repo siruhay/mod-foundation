@@ -21,7 +21,8 @@ class FoundationOrganizationController extends Controller
         Gate::authorize('view', FoundationOrganization::class);
 
         return new OrganizationCollection(
-            FoundationOrganization::applyMode($request->mode)
+            FoundationOrganization::withDepth()
+                ->applyMode($request->mode)
                 ->filter($request->filters)
                 ->search($request->findBy)
                 ->sortBy($request->sortBy)

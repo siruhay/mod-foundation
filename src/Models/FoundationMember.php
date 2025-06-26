@@ -32,7 +32,7 @@ class FoundationMember extends FoundationBiodata
     {
         return [
             'genders' => FoundationGender::forCombo(),
-            'positions' => FoundationPosition::where('scope', 'MEMBER')->forCombo()
+            'positions' => FoundationPosmap::where('scope', 'MEMBER')->forCombo()
         ];
     }
 
@@ -64,7 +64,7 @@ class FoundationMember extends FoundationBiodata
             'id' => $model->id,
             'name' => $model->name,
             'slug' => $model->slug,
-            'position' => $model->position->name,
+            'position' => optional($model->position)->name,
 
             'subtitle' => (string) $model->updated_at,
             'updated_at' => (string) $model->updated_at,
@@ -88,7 +88,7 @@ class FoundationMember extends FoundationBiodata
             'village_id' => $model->village_id,
             'subdistrict_id' => $model->subdistrict_id,
             'regency_id' => $model->regency_id,
-            'community_id' => $model->community_id,
+            // 'community_id' => $model->community_id,
             'communitymap_id' => $model->communitymap_id,
             'citizen' => $model->citizen,
             'neighborhood' => $model->neighborhood,

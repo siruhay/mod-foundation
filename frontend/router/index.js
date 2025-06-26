@@ -69,50 +69,50 @@ export default {
 		// },
 
 		// member
-		{
-			path: "community/:community/member",
-			component: () =>
-				import(
-					/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/community-member/index.vue"
-				),
-			children: [
-				{
-					path: "",
-					name: "foundation-member",
-					component: () =>
-						import(
-							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/community-member/crud/data.vue"
-						),
-				},
+		// {
+		// 	path: "community/:community/member",
+		// 	component: () =>
+		// 		import(
+		// 			/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/community-member/index.vue"
+		// 		),
+		// 	children: [
+		// 		{
+		// 			path: "",
+		// 			name: "foundation-member",
+		// 			component: () =>
+		// 				import(
+		// 					/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/community-member/crud/data.vue"
+		// 				),
+		// 		},
 
-				{
-					path: "create",
-					name: "foundation-member-create",
-					component: () =>
-						import(
-							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/community-member/crud/create.vue"
-						),
-				},
+		// 		{
+		// 			path: "create",
+		// 			name: "foundation-member-create",
+		// 			component: () =>
+		// 				import(
+		// 					/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/community-member/crud/create.vue"
+		// 				),
+		// 		},
 
-				{
-					path: ":member/edit",
-					name: "foundation-member-edit",
-					component: () =>
-						import(
-							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/community-member/crud/edit.vue"
-						),
-				},
+		// 		{
+		// 			path: ":member/edit",
+		// 			name: "foundation-member-edit",
+		// 			component: () =>
+		// 				import(
+		// 					/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/community-member/crud/edit.vue"
+		// 				),
+		// 		},
 
-				{
-					path: ":member/show",
-					name: "foundation-member-show",
-					component: () =>
-						import(
-							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/community-member/crud/show.vue"
-						),
-				},
-			],
-		},
+		// 		{
+		// 			path: ":member/show",
+		// 			name: "foundation-member-show",
+		// 			component: () =>
+		// 				import(
+		// 					/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/community-member/crud/show.vue"
+		// 				),
+		// 		},
+		// 	],
+		// },
 
 		// communitymap
 		{
@@ -155,6 +155,52 @@ export default {
 					component: () =>
 						import(
 							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/communitymap/crud/show.vue"
+						),
+				},
+			],
+		},
+
+		// organization
+		{
+			path: "organization",
+			component: () =>
+				import(
+					/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/organization/index.vue"
+				),
+			children: [
+				{
+					path: "",
+					name: "foundation-organization",
+					component: () =>
+						import(
+							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/organization/crud/data.vue"
+						),
+				},
+
+				{
+					path: "create",
+					name: "foundation-organization-create",
+					component: () =>
+						import(
+							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/organization/crud/create.vue"
+						),
+				},
+
+				{
+					path: ":organization/edit",
+					name: "foundation-organization-edit",
+					component: () =>
+						import(
+							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/organization/crud/edit.vue"
+						),
+				},
+
+				{
+					path: ":organization/show",
+					name: "foundation-organization-show",
+					component: () =>
+						import(
+							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/organization/crud/show.vue"
 						),
 				},
 			],
@@ -446,52 +492,6 @@ export default {
 			],
 		},
 
-		// official
-		{
-			path: "workunit/:workunit/official",
-			component: () =>
-				import(
-					/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-official/index.vue"
-				),
-			children: [
-				{
-					path: "",
-					name: "foundation-official",
-					component: () =>
-						import(
-							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-official/crud/data.vue"
-						),
-				},
-
-				{
-					path: "create",
-					name: "foundation-official-create",
-					component: () =>
-						import(
-							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-official/crud/create.vue"
-						),
-				},
-
-				{
-					path: ":official/edit",
-					name: "foundation-official-edit",
-					component: () =>
-						import(
-							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-official/crud/edit.vue"
-						),
-				},
-
-				{
-					path: ":official/show",
-					name: "foundation-official-show",
-					component: () =>
-						import(
-							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-official/crud/show.vue"
-						),
-				},
-			],
-		},
-
 		// community
 		{
 			path: "workunit/:workunit/community",
@@ -533,6 +533,144 @@ export default {
 					component: () =>
 						import(
 							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community/crud/show.vue"
+						),
+				},
+			],
+		},
+
+		// member
+		{
+			path: "workunit/:workunit/community/:community/member",
+			component: () =>
+				import(
+					/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community-member/index.vue"
+				),
+			children: [
+				{
+					path: "",
+					name: "foundation-member",
+					component: () =>
+						import(
+							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community-member/crud/data.vue"
+						),
+				},
+
+				{
+					path: "create",
+					name: "foundation-member-create",
+					component: () =>
+						import(
+							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community-member/crud/create.vue"
+						),
+				},
+
+				{
+					path: ":member/edit",
+					name: "foundation-member-edit",
+					component: () =>
+						import(
+							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community-member/crud/edit.vue"
+						),
+				},
+
+				{
+					path: ":member/show",
+					name: "foundation-member-show",
+					component: () =>
+						import(
+							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community-member/crud/show.vue"
+						),
+				},
+			],
+		},
+
+		// position
+		{
+			path: "workunit/:workunit/community/:community/position",
+			component: () =>
+				import(
+					/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community-position/index.vue"
+				),
+			children: [
+				{
+					path: "",
+					name: "foundation-communitypos",
+					component: () =>
+						import(
+							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community-position/crud/data.vue"
+						),
+				},
+
+				{
+					path: "create",
+					name: "foundation-communitypos-create",
+					component: () =>
+						import(
+							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community-position/crud/create.vue"
+						),
+				},
+
+				{
+					path: ":position/edit",
+					name: "foundation-communitypos-edit",
+					component: () =>
+						import(
+							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community-position/crud/edit.vue"
+						),
+				},
+
+				{
+					path: ":position/show",
+					name: "foundation-communitypos-show",
+					component: () =>
+						import(
+							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community-position/crud/show.vue"
+						),
+				},
+			],
+		},
+
+		// official
+		{
+			path: "workunit/:workunit/official",
+			component: () =>
+				import(
+					/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-official/index.vue"
+				),
+			children: [
+				{
+					path: "",
+					name: "foundation-official",
+					component: () =>
+						import(
+							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-official/crud/data.vue"
+						),
+				},
+
+				{
+					path: "create",
+					name: "foundation-official-create",
+					component: () =>
+						import(
+							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-official/crud/create.vue"
+						),
+				},
+
+				{
+					path: ":official/edit",
+					name: "foundation-official-edit",
+					component: () =>
+						import(
+							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-official/crud/edit.vue"
+						),
+				},
+
+				{
+					path: ":official/show",
+					name: "foundation-official-show",
+					component: () =>
+						import(
+							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-official/crud/show.vue"
 						),
 				},
 			],

@@ -6,24 +6,24 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use Module\Foundation\Models\FoundationPosition;
-use Module\Foundation\Models\FoundationWorkunit;
+use Module\Foundation\Models\FoundationCommunity;
 use Module\Foundation\Http\Resources\PositionCollection;
 use Module\Foundation\Http\Resources\PositionShowResource;
 
-class FoundationWorkunitposController extends Controller
+class FoundationCommunityposController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
+     * @param  \Module\Foundation\Models\FoundationCommunity $foundationCommunity
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, FoundationWorkunit $foundationWorkunit)
+    public function index(Request $request, FoundationCommunity $foundationCommunity)
     {
         Gate::authorize('view', FoundationPosition::class);
 
         return new PositionCollection(
-            $foundationWorkunit
+            $foundationCommunity
                 ->positions()
                 ->withDepth()
                 ->with(['officer'])
@@ -39,26 +39,26 @@ class FoundationWorkunitposController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
+     * @param  \Module\Foundation\Models\FoundationCommunity $foundationCommunity
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, FoundationWorkunit $foundationWorkunit)
+    public function store(Request $request, FoundationCommunity $foundationCommunity)
     {
         Gate::authorize('create', FoundationPosition::class);
 
         $request->validate([]);
 
-        return FoundationPosition::storeRecord($request, $foundationWorkunit);
+        return FoundationPosition::storeRecord($request, $foundationCommunity);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
+     * @param  \Module\Foundation\Models\FoundationCommunity $foundationCommunity
      * @param  \Module\Foundation\Models\FoundationPosition $foundationPosition
      * @return \Illuminate\Http\Response
      */
-    public function show(FoundationWorkunit $foundationWorkunit, FoundationPosition $foundationPosition)
+    public function show(FoundationCommunity $foundationCommunity, FoundationPosition $foundationPosition)
     {
         Gate::authorize('show', $foundationPosition);
 
@@ -69,11 +69,11 @@ class FoundationWorkunitposController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
+     * @param  \Module\Foundation\Models\FoundationCommunity $foundationCommunity
      * @param  \Module\Foundation\Models\FoundationPosition $foundationPosition
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FoundationWorkunit $foundationWorkunit, FoundationPosition $foundationPosition)
+    public function update(Request $request, FoundationCommunity $foundationCommunity, FoundationPosition $foundationPosition)
     {
         Gate::authorize('update', $foundationPosition);
 
@@ -85,11 +85,11 @@ class FoundationWorkunitposController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Module\Foundation\Models\FoundationWorkunit $foundationWorkunit
+     * @param  \Module\Foundation\Models\FoundationCommunity $foundationCommunity
      * @param  \Module\Foundation\Models\FoundationPosition $foundationPosition
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FoundationWorkunit $foundationWorkunit, FoundationPosition $foundationPosition)
+    public function destroy(FoundationCommunity $foundationCommunity, FoundationPosition $foundationPosition)
     {
         Gate::authorize('delete', $foundationPosition);
 
@@ -102,7 +102,7 @@ class FoundationWorkunitposController extends Controller
      * @param  \Module\Foundation\Models\FoundationPosition $foundationPosition
      * @return \Illuminate\Http\Response
      */
-    public function restore(FoundationWorkunit $foundationWorkunit, FoundationPosition $foundationPosition)
+    public function restore(FoundationCommunity $foundationCommunity, FoundationPosition $foundationPosition)
     {
         Gate::authorize('restore', $foundationPosition);
 
@@ -115,7 +115,7 @@ class FoundationWorkunitposController extends Controller
      * @param  \Module\Foundation\Models\FoundationPosition $foundationPosition
      * @return \Illuminate\Http\Response
      */
-    public function forceDelete(FoundationWorkunit $foundationWorkunit, FoundationPosition $foundationPosition)
+    public function forceDelete(FoundationCommunity $foundationCommunity, FoundationPosition $foundationPosition)
     {
         Gate::authorize('destroy', $foundationPosition);
 

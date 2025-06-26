@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Module\Foundation\Http\Resources\CommunityResource;
 
 class FoundationCommunity extends Model
@@ -61,8 +62,8 @@ class FoundationCommunity extends Model
 
     /**
      * toFilterableArray function
-     * 
-     * {param} => {field} | {mode}::{field} 
+     *
+     * {param} => {field} | {mode}::{field}
      * mode = raw | json | month | eager | orwhere
      *
      * @return array
@@ -77,7 +78,7 @@ class FoundationCommunity extends Model
 
     /**
      * mapFilters function
-     * 
+     *
      * type: Combobox, DateInput, NumberInput, Select, Textfield, TimeInput, Hidden
      *
      * @return array
@@ -206,13 +207,23 @@ class FoundationCommunity extends Model
     }
 
     /**
-     * Undocumented function
+     * members function
      *
-     * @return HasMany
+     * @return MorphMany
      */
-    public function members(): HasMany
+    public function members(): MorphMany
     {
-        return $this->hasMany(FoundationMember::class, 'community_id');
+        return $this->morphMany(FoundationMember::class, 'workunitable');
+    }
+
+    /**
+     * positions function
+     *
+     * @return MorphMany
+     */
+    public function positions(): MorphMany
+    {
+        return $this->morphMany(FoundationPosition::class, 'workunitable');
     }
 
     /**
