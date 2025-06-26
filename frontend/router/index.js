@@ -548,7 +548,7 @@ export default {
 			children: [
 				{
 					path: "",
-					name: "foundation-workunitcomm",
+					name: "foundation-workcomm",
 					component: () =>
 						import(
 							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community/crud/data.vue"
@@ -557,7 +557,7 @@ export default {
 
 				{
 					path: "create",
-					name: "foundation-workunitcomm-create",
+					name: "foundation-workcomm-create",
 					component: () =>
 						import(
 							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community/crud/create.vue"
@@ -565,8 +565,8 @@ export default {
 				},
 
 				{
-					path: ":workunitcomm/edit",
-					name: "foundation-workunitcomm-edit",
+					path: ":workcomm/edit",
+					name: "foundation-workcomm-edit",
 					component: () =>
 						import(
 							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community/crud/edit.vue"
@@ -574,8 +574,8 @@ export default {
 				},
 
 				{
-					path: ":workunitcomm/show",
-					name: "foundation-workunitcomm-show",
+					path: ":workcomm/show",
+					name: "foundation-workcomm-show",
 					component: () =>
 						import(
 							/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community/crud/show.vue"
@@ -586,7 +586,7 @@ export default {
 
 		// member
 		{
-			path: "workunit/:workunit/community/:workunitcomm/member",
+			path: "workunit/:workunit/community/:workcomm/member",
 			component: () =>
 				import(
 					/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community-member/index.vue"
@@ -632,7 +632,7 @@ export default {
 
 		// position
 		{
-			path: "workunit/:workunit/community/:workunitcomm/position",
+			path: "workunit/:workunit/community/:workcomm/position",
 			component: () =>
 				import(
 					/* webpackChunkName: "foundation" */ "@modules/foundation/frontend/pages/workunit-community-position/index.vue"

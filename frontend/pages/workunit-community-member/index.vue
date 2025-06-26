@@ -2,8 +2,8 @@
 	<page-crud
 		page-name="foundation-member"
 		page-key="member"
-		parent-name="foundation-community"
-		parent-key="community"
+		parent-name="foundation-workcomm"
+		parent-key="workcomm"
 	></page-crud>
 </template>
 

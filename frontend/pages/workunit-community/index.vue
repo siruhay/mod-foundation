@@ -1,7 +1,7 @@
 <template>
 	<page-crud
-		page-name="foundation-workunitcomm"
-		page-key="workunitcomm"
+		page-name="foundation-workcomm"
+		page-key="workcomm"
 		parent-name="foundation-workunit"
 		parent-key="workunit"
 	></page-crud>
@@ -9,6 +9,6 @@
 
 <script>
 export default {
-	name: "foundation-workunitcomm",
+	name: "foundation-workcomm",
 };
 </script>

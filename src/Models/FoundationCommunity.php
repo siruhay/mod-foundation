@@ -191,6 +191,7 @@ class FoundationCommunity extends Model
             'communitymap_id'   => $model->communitymap_id,
             'subdistrict_id'    => $model->subdistrict_id,
             'village_id'        => $model->village_id,
+            'workunit_id'       => $model->workunit_id,
             'citizen'           => $model->citizen,
             'neighborhood'      => $model->neighborhood,
         ];

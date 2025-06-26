@@ -75,12 +75,30 @@
 			</v-card-text>
 		</template>
 
-		<template v-slot:info="{ theme }">
-			<div class="text-overline mt-4">Aksi</div>
+		<template v-slot:info="{ record, theme }">
+			<div class="text-overline mt-4">Link</div>
 			<v-divider class="mb-3"></v-divider>
 
-			<v-row>
-				<v-col cols="12">
+			<v-row dense>
+				<v-col cols="6">
+					<v-btn
+						:color="theme"
+						variant="flat"
+						block
+						@click="
+							$router.push({
+								name: 'foundation-communitypos',
+								params: {
+									workunit: record.workunit_id,
+									workcomm: record.id,
+								},
+							})
+						"
+						>jabatan</v-btn
+					>
+				</v-col>
+
+				<v-col cols="6">
 					<v-btn
 						:color="theme"
 						variant="flat"
@@ -88,9 +106,13 @@
 						@click="
 							$router.push({
 								name: 'foundation-member',
+								params: {
+									workunit: record.workunit_id,
+									workcomm: record.id,
+								},
 							})
 						"
-						>daftar anggota</v-btn
+						>anggota</v-btn
 					>
 				</v-col>
 			</v-row>
