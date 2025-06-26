@@ -21,7 +21,8 @@ class FoundationWorkunitController extends Controller
         Gate::authorize('view', FoundationWorkunit::class);
 
         return new WorkunitCollection(
-            FoundationWorkunit::applyMode($request->mode)
+            FoundationWorkunit::withDepth()
+                ->applyMode($request->mode)
                 ->filter($request->filters)
                 ->search($request->findBy)
                 ->sortBy($request->sortBy)

@@ -72,7 +72,10 @@ class FoundationWorkunit extends Model
         return [
             'id' => $model->id,
             'name' => $model->name,
-
+            'nest_deep' => $model->depth,
+            'nest_leaf' => $model->isLeaf(),
+            'nest_next' => $model->nextSiblings()->count() > 0,
+            'nest_prev' => $model->prevSiblings()->count() > 0,
             'subtitle' => (string) $model->updated_at,
             'updated_at' => (string) $model->updated_at,
         ];

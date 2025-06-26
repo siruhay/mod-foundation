@@ -57,7 +57,7 @@
 						block
 						@click="
 							$router.push({
-								name: 'foundation-community',
+								name: 'foundation-workunitcomm',
 							})
 						"
 						>lembaga</v-btn
