@@ -1,10 +1,7 @@
 <template>
 	<form-show with-helpdesk>
 		<template
-			v-slot:default="{
-				record,
-				combos: { parents, subdistricts, villages },
-			}"
+			v-slot:default="{ record, combos: { parents, subdistricts, villages } }"
 		>
 			<v-card-text>
 				<v-row dense>
@@ -34,10 +31,7 @@
 						></v-select>
 					</v-col>
 
-					<v-col
-						cols="6"
-						v-if="['KELURAHAN', 'DESA'].includes(record.scope)"
-					>
+					<v-col cols="6" v-if="['KELURAHAN', 'DESA'].includes(record.scope)">
 						<v-combobox
 							:items="subdistricts"
 							:return-object="false"
@@ -47,10 +41,7 @@
 						></v-combobox>
 					</v-col>
 
-					<v-col
-						cols="6"
-						v-if="['KELURAHAN', 'DESA'].includes(record.scope)"
-					>
+					<v-col cols="6" v-if="['KELURAHAN', 'DESA'].includes(record.scope)">
 						<v-combobox
 							:items="villages"
 							:return-object="false"
@@ -98,9 +89,7 @@
 
 				<v-col cols="4">
 					<v-btn
-						:disabled="
-							!['DESA', 'KELURAHAN'].includes(record.scope)
-						"
+						:disabled="!['DESA', 'KELURAHAN'].includes(record.scope)"
 						:color="theme"
 						variant="flat"
 						block

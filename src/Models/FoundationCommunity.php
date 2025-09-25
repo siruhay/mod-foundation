@@ -170,7 +170,7 @@ class FoundationCommunity extends Model
             'citizen' => $model->citizen,
             'neighborhood' => $model->neighborhood,
 
-            'members_count' => $model->members_count,
+            'members_count' => $model->members_count ?: 0,
 
             'subtitle' => (string) $model->updated_at,
             'updated_at' => (string) $model->updated_at,
@@ -265,11 +265,16 @@ class FoundationCommunity extends Model
      */
     public static function storeRecord(Request $request)
     {
-        $communitymap   = FoundationCommunitymap::find($request->communitymap_id);
-        $subdistrict    = FoundationSubdistrict::find($request->subdistrict_id);
-        $village        = FoundationVillage::find($request->village_id);
-        $name           = optional($communitymap)->short ? optional($communitymap)->short . ' DESA ' . optional($village)->name : optional($communitymap)->name;
-        $slug           = sha1($name);
+        if (! $request->name) {
+            $communitymap   = FoundationCommunitymap::find($request->communitymap_id);
+            $subdistrict    = FoundationSubdistrict::find($request->subdistrict_id);
+            $village        = FoundationVillage::find($request->village_id);
+            $name           = optional($communitymap)->short ? optional($communitymap)->short . ' DESA ' . optional($village)->name : optional($communitymap)->name;
+        } else {
+            $name           = $request->name;
+        }
+
+        $slug               = sha1($name);
 
         if ($model = static::firstWhere('slug', $slug)) {
             return response()->json([
@@ -278,7 +283,7 @@ class FoundationCommunity extends Model
             ], 500);
         }
 
-        $model          = new static();
+        $model              = new static();
 
         DB::connection($model->connection)->beginTransaction();
 
@@ -313,12 +318,17 @@ class FoundationCommunity extends Model
      */
     public static function updateRecord(Request $request, $model)
     {
-        $communitymap   = FoundationCommunitymap::find($request->communitymap_id);
-        $subdistrict    = FoundationSubdistrict::find($request->subdistrict_id);
-        $village        = FoundationVillage::find($request->village_id);
-        $name           = optional($communitymap)->short ? optional($communitymap)->short . ' DESA ' . optional($village)->name : optional($communitymap)->name;
-        $slug           = sha1($name);
-        $exists         = static::firstWhere('slug', $slug);
+        if (! $request->name) {
+            $communitymap   = FoundationCommunitymap::find($request->communitymap_id);
+            $subdistrict    = FoundationSubdistrict::find($request->subdistrict_id);
+            $village        = FoundationVillage::find($request->village_id);
+            $name           = optional($communitymap)->short ? optional($communitymap)->short . ' DESA ' . optional($village)->name : optional($communitymap)->name;
+        } else {
+            $name           = $request->name;
+        }
+
+        $slug               = sha1($name);
+        $exists             = static::firstWhere('slug', $slug);
 
         if ($exists && $exists->id !== $model->id) {
             return response()->json([

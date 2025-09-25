@@ -26,6 +26,7 @@ class FoundationWorkunitCommunityController extends Controller
             $foundationWorkunit
                 ->communities()
                 ->with(['subdistrict', 'village'])
+                ->withCount('members')
                 ->applyMode($request->mode)
                 ->filter($request->filters)
                 ->search($request->findBy)

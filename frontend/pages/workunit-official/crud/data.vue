@@ -1,5 +1,5 @@
 <template>
-	<form-data>
+	<form-data navback-to="foundation-workunit-show">
 		<template v-slot:forminfo></template>
 
 		<template v-slot:helpdesk></template>

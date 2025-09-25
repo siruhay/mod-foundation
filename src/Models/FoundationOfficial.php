@@ -32,9 +32,52 @@ class FoundationOfficial extends FoundationBiodata
     {
         return [
             'genders' => FoundationGender::forCombo(),
-            // 'positions' => FoundationPosition::where('scope', 'OFFICIAL')->forCombo(),
             'subdistricts' => FoundationSubdistrict::where('regency_id', 3)->forCombo(),
             'villages' => optional($model)->subdistrict_id ? FoundationVillage::where('district_id', $model->subdistrict_id)->forCombo() : [],
+        ];
+    }
+
+    /**
+     * mapHeaders function
+     *
+     * readonly value?: SelectItemKey<any>
+     * readonly title?: string | undefined
+     * readonly align?: 'start' | 'end' | 'center' | undefined
+     * readonly width?: string | number | undefined
+     * readonly minWidth?: string | undefined
+     * readonly maxWidth?: string | undefined
+     * readonly nowrap?: boolean | undefined
+     * readonly sortable?: boolean | undefined
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapHeaders(Request $request): array
+    {
+        return [
+            ['title' => 'Position', 'value' => 'position_name'],
+            ['title' => 'Name', 'value' => 'name'],
+            ['title' => 'NIK/NIP', 'value' => 'slug'],
+            ['title' => 'Updated', 'value' => 'updated_at', 'sortable' => false, 'width' => '170'],
+        ];
+    }
+
+    /**
+     * mapResource function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResource(Request $request, $model): array
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+            'slug' => $model->slug,
+            'position_name' => optional($model->position)->name,
+
+            'subtitle' => (string) $model->updated_at,
+            'updated_at' => (string) $model->updated_at,
         ];
     }
 
