@@ -15,7 +15,7 @@ return new class () extends Migration {
             $table->string('name')->index();
             $table->string('slug', 40)->unique();
             $table->foreignId('posmap_id')->nullable();
-            $table->enum('scope', ['OPD', 'BADAN', 'UPT', 'KECAMATAN', 'KELURAHAN', 'DESA', 'LKD'])->index()->default('OPD');
+            $table->enum('scope', ['BADAN', 'DESA', 'KECAMATAN', 'KELURAHAN', 'LKD', 'OPD', 'UPT'])->index()->default('OPD');
             $table->enum('position_type', ['STRUCTURAL', 'FUNCTIONAL', 'EXECUTOR'])->default('EXECUTOR');
             $table->jsonb('meta')->nullable();
             $table->nestedSet();

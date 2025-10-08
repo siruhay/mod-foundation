@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->id();
             $table->string('name', 100)->index();
             $table->string('slug', 40)->unique();
-            $table->enum('scope', ['OPD', 'LKD'])->index()->default('OPD');
+            $table->enum('scope', ['BADAN', 'DESA', 'KECAMATAN', 'KELURAHAN', 'LKD', 'OPD', 'UPT'])->index()->default('OPD');
             $table->jsonb('meta')->nullable();
             $table->softDeletes();
             $table->timestamps();
