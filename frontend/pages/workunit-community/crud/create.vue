@@ -1,11 +1,7 @@
 <template>
 	<form-create with-helpdesk>
 		<template
-			v-slot:default="{
-				combos: { communitymaps, subdistricts, villages },
-				record,
-				store,
-			}"
+			v-slot:default="{ combos: { communitymaps, subdistricts, villages }, record }"
 		>
 			<v-card-text>
 				<v-row dense>
@@ -64,7 +60,6 @@
 							label="Kecamatan"
 							v-model="record.subdistrict_id"
 							hide-details
-							@update:modelValue="updateSubdistrict($event, store)"
 						></v-combobox>
 					</v-col>
 
@@ -75,9 +70,6 @@
 							label="Desa"
 							v-model="record.village_id"
 							hide-details
-							@update:modelValue="
-								patchCommunityName(record, communitymaps, villages)
-							"
 						></v-combobox>
 					</v-col>
 				</v-row>

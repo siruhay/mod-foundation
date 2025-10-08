@@ -1,6 +1,12 @@
 <template>
 	<form-create with-helpdesk>
-		<template v-slot:default="{ combos: { genders, positions }, record }">
+		<template
+			v-slot:default="{
+				combos: { genders, positions, regencies, subdistrics, villages },
+				record,
+				store,
+			}"
+		>
 			<v-card-text>
 				<v-row dense>
 					<v-col cols="12">
@@ -47,22 +53,30 @@
 
 					<v-col cols="6">
 						<v-combobox
+							:items="regencies"
+							:return-object="false"
 							label="Kota/Kabupaten"
 							v-model="record.regency_id"
 							hide-details
+							@update:modelValue="fetchSubdistrict($event, store.combos)"
 						></v-combobox>
 					</v-col>
 
 					<v-col cols="6">
 						<v-combobox
+							:items="subdistrics"
+							:return-object="false"
 							label="Kecamatan"
 							v-model="record.subdistrict_id"
 							hide-details
+							@update:modelValue="fetchVillage($event, store.combos)"
 						></v-combobox>
 					</v-col>
 
 					<v-col cols="6">
 						<v-combobox
+							:items="villages"
+							:return-object="false"
 							label="Kelurahan/Desa"
 							v-model="record.village_id"
 							hide-details
@@ -102,5 +116,29 @@
 <script>
 export default {
 	name: "foundation-official-create",
+
+	methods: {
+		fetchSubdistrict: function (regencyId, combos) {
+			this.$http(`/foundation/api/fetch-combos`, {
+				method: "GET",
+				params: {
+					regency: regencyId,
+				},
+			}).then((res) => {
+				combos.subdistrics = res;
+			});
+		},
+
+		fetchVillage: function (subdistrictId, combos) {
+			this.$http(`/foundation/api/fetch-combos`, {
+				method: "GET",
+				params: {
+					subdistric: subdistrictId,
+				},
+			}).then((res) => {
+				combos.villages = res;
+			});
+		},
+	},
 };
 </script>

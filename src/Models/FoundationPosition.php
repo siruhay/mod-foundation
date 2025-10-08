@@ -61,6 +61,50 @@ class FoundationPosition extends Model
     protected $defaultOrder = '_lft';
 
     /**
+     * mapRecordBase function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapRecordBase(Request $request): array
+    {
+        $worktable_type = $request->segment(3) === 'community' ? 'Module\Foundation\Models\FoundationCommunity' : 'Module\Foundation\Models\FoundationWorkunit';
+        $worktable_id = $request->segment(4);
+
+        return [
+            'id' => null,
+            'name' => null,
+            'slug' => null,
+            'posmap_id' => null,
+            'village_id' => null,
+            'workunitable_type' => $worktable_type,
+            'workunitable_id' => $worktable_id,
+            'organization_id' => null,
+            'officer_id' => null,
+            'position_type' => null,
+        ];
+    }
+
+    /**
+     * mapCombos function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapCombos(Request $request, $model = null): array
+    {
+        $scope = $request->segment(3) === 'community' ? 'LKD' : 'OPD';
+        $worktable_type = $request->segment(3) === 'community' ? 'Module\Foundation\Models\FoundationCommunity' : 'Module\Foundation\Models\FoundationWorkunit';
+        $worktable_id = $request->segment(4);
+
+        return [
+            'organizations' => FoundationOrganization::where('scope', $scope)->orderBy('_lft')->forCombo(),
+            'posmaps' => FoundationPosmap::where('scope', $scope)->forCombo(),
+            'parents' => FoundationPosition::where('workunitable_type', $worktable_type)->where('workunitable_id', $worktable_id)->forCombo()
+        ];
+    }
+
+    /**
      * mapHeaders function
      *
      * readonly value?: SelectItemKey<any>

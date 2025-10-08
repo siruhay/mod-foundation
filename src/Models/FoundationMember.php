@@ -30,9 +30,10 @@ class FoundationMember extends FoundationBiodata
      */
     public static function mapCombos(Request $request, $model = null): array
     {
+        $community = FoundationCommunity::find($request->segment(4));
         return [
             'genders' => FoundationGender::forCombo(),
-            'positions' => FoundationPosmap::where('scope', 'MEMBER')->forCombo()
+            'positions' => $community->positions()->orderBy('_lft')->forCombo()
         ];
     }
 
@@ -88,7 +89,6 @@ class FoundationMember extends FoundationBiodata
             'village_id' => $model->village_id,
             'subdistrict_id' => $model->subdistrict_id,
             'regency_id' => $model->regency_id,
-            // 'community_id' => $model->community_id,
             'communitymap_id' => $model->communitymap_id,
             'citizen' => $model->citizen,
             'neighborhood' => $model->neighborhood,
@@ -105,6 +105,7 @@ class FoundationMember extends FoundationBiodata
     public static function storeRecord(Request $request, $parent)
     {
         $model = new static();
+        $position = FoundationPosition::find($request->position_id);
 
         DB::connection($model->connection)->beginTransaction();
 
@@ -122,14 +123,27 @@ class FoundationMember extends FoundationBiodata
             $model->citizen = $request->citizen;
             $model->neighborhood = $request->neighborhood;
             $model->scope = $request->scope;
+            $model->kind = 'NON-ASN';
+            $model->type = 'LKD';
 
             $parent->members()->save($model);
 
             if ($model->slug) {
-                if ($model->position_id === 19) {
-                    TrainingMemberUpdated::dispatch($model, ['myfoundation-chairman', 'mytraining-member']);
+                if ($position->name === 'KETUA') {
+                    TrainingMemberUpdated::dispatch(
+                        $model,
+                        array_merge(
+                            ['myfoundation-chairman', 'mytraining-member']
+                        )
+                    );
                 } else {
-                    TrainingMemberUpdated::dispatch($model, ['mytraining-member']);
+                    TrainingMemberUpdated::dispatch(
+                        $model,
+                        array_merge(
+                            ['mytraining-member'],
+                            $model->scope ? ['myposyandu-cadre'] : []
+                        )
+                    );
                 }
             }
 
@@ -155,6 +169,8 @@ class FoundationMember extends FoundationBiodata
      */
     public static function updateRecord(Request $request, $model, $parent)
     {
+        $position = FoundationPosition::find($request->position_id);
+
         DB::connection($model->connection)->beginTransaction();
 
         try {
@@ -174,10 +190,21 @@ class FoundationMember extends FoundationBiodata
             $model->save();
 
             if ($model->slug) {
-                if ($model->position_id === 19) {
-                    TrainingMemberUpdated::dispatch($model, ['myfoundation-chairman', 'mytraining-member']);
+                if ($position->name === 'KETUA') {
+                    TrainingMemberUpdated::dispatch(
+                        $model,
+                        array_merge(
+                            ['myfoundation-chairman', 'mytraining-member']
+                        )
+                    );
                 } else {
-                    TrainingMemberUpdated::dispatch($model, ['mytraining-member']);
+                    TrainingMemberUpdated::dispatch(
+                        $model,
+                        array_merge(
+                            ['mytraining-member'],
+                            $model->scope ? ['myposyandu-cadre'] : []
+                        )
+                    );
                 }
             }
 

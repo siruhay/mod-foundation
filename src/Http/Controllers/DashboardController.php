@@ -9,6 +9,8 @@ use Illuminate\Http\JsonResponse;
 use Module\Foundation\Models\FoundationCommunity;
 use Module\Foundation\Models\FoundationOfficial;
 use Module\Foundation\Models\FoundationSubdistrict;
+use Module\Reference\Models\ReferenceSubdistrict;
+use Module\Reference\Models\ReferenceVillage;
 
 class DashboardController extends Controller
 {
@@ -23,13 +25,26 @@ class DashboardController extends Controller
         //
     }
 
+    public function combos(Request $request): mixed
+    {
+        if ($request->has('regency')) {
+            return ReferenceSubdistrict::where('regency_id', $request->regency)->forCombo();
+        }
+
+        if ($request->has('subdistric')) {
+            return ReferenceVillage::where('district_id', $request->subdistric)->forCombo();
+        }
+
+        return [];
+    }
+
     /**
      * mapReportData function
      *
      * @param [type] $type
      * @return array
      */
-    static function mapReportData(Request $request): array
+    public static function mapReportData(Request $request): array
     {
         switch ($request->type) {
             case 'official':

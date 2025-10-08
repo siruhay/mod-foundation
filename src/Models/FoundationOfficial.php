@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Module\Foundation\Events\TrainingOfficialUpdated;
 use Module\Foundation\Http\Resources\OfficialResource;
+use Module\Reference\Models\ReferenceRegency;
 
 class FoundationOfficial extends FoundationBiodata
 {
@@ -32,7 +33,9 @@ class FoundationOfficial extends FoundationBiodata
     {
         return [
             'genders' => FoundationGender::forCombo(),
-            'subdistricts' => FoundationSubdistrict::where('regency_id', 3)->forCombo(),
+            'positions' => FoundationWorkunit::find((int) $request->segment(4))->positions()->orderBy('_lft')->forCombo(),
+            'regencies' => ReferenceRegency::forCombo(),
+            'subdistricts' => optional($model)->regency_id ? FoundationSubdistrict::where('regency_id', 3)->forCombo() : [],
             'villages' => optional($model)->subdistrict_id ? FoundationVillage::where('district_id', $model->subdistrict_id)->forCombo() : [],
         ];
     }
@@ -117,6 +120,7 @@ class FoundationOfficial extends FoundationBiodata
         try {
             $model->name = $request->name;
             $model->slug = $request->slug;
+            $model->type = 'DESA';
             $model->phone = $request->phone;
             $model->gender_id = $request->gender_id;
             $model->position_id = $request->position_id;

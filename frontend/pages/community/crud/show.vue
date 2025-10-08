@@ -1,13 +1,19 @@
 <template>
-	<form-show with-helpdesk>
+	<form-show hide-edit hide-delete with-helpdesk>
 		<template
-			v-slot:default="{
-				combos: { communitymaps, subdistricts, villages },
-				record,
-			}"
+			v-slot:default="{ combos: { communitymaps, subdistricts, villages }, record }"
 		>
 			<v-card-text>
 				<v-row dense>
+					<v-col cols="12">
+						<v-text-field
+							label="Name"
+							v-model="record.name"
+							hide-details
+							readonly
+						></v-text-field>
+					</v-col>
+
 					<v-col
 						:cols="
 							record && record.communitymap_id === 4
@@ -23,6 +29,7 @@
 							label="Tipe"
 							v-model="record.communitymap_id"
 							hide-details
+							readonly
 						></v-combobox>
 					</v-col>
 
@@ -30,25 +37,23 @@
 						cols="3"
 						v-if="
 							record &&
-							(record.communitymap_id === 4 ||
-								record.communitymap_id === 5)
+							(record.communitymap_id === 4 || record.communitymap_id === 5)
 						"
 					>
 						<v-text-field
 							label="RW"
 							v-model="record.citizen"
 							hide-details
+							readonly
 						></v-text-field>
 					</v-col>
 
-					<v-col
-						cols="3"
-						v-if="record && record.communitymap_id === 5"
-					>
+					<v-col cols="3" v-if="record && record.communitymap_id === 5">
 						<v-text-field
 							label="RT"
 							v-model="record.neighborhood"
 							hide-details
+							readonly
 						></v-text-field>
 					</v-col>
 

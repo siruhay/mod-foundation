@@ -16,6 +16,7 @@ use Module\Foundation\Http\Controllers\FoundationWorkunitCommunityController;
 
 Route::get('dashboard', [DashboardController::class, 'index']);
 Route::get('report', [DashboardController::class, 'report']);
+Route::get('fetch-combos', [DashboardController::class, 'combos']);
 
 Route::resource('community', FoundationCommunityController::class)->parameters(['community' => 'foundationCommunity']);
 Route::resource('organization', FoundationOrganizationController::class)->parameters(['organization' => 'foundationOrganization']);
@@ -25,7 +26,7 @@ Route::resource('workunit.position', FoundationWorkunitposController::class)->pa
 Route::resource('workunit.official', FoundationOfficialController::class)->parameters(['workunit' => 'foundationWorkunit', 'official' => 'foundationOfficial']);
 Route::resource('workunit.community', FoundationWorkunitCommunityController::class)->parameters(['workunit' => 'foundationWorkunit', 'community' => 'foundationCommunity']);
 Route::resource('community.position', FoundationCommunityposController::class)->parameters(['community' => 'foundationCommunity', 'position' => 'foundationPosition']);
-Route::resource('community.member', FoundationMemberController::class)->parameters(['community' => 'foundationCommunity', 'position' => 'foundationPosition']);
+Route::resource('community.member', FoundationMemberController::class)->parameters(['community' => 'foundationCommunity', 'member' => 'foundationMember']);
 Route::resource('communitymap', FoundationCommunitymapController::class)->parameters(['communitymap' => 'foundationCommunitymap']);
 
 Route::get('subdistrict/{foundationSubdistrict}/villages', [FoundationSubdistrictController::class, 'villages']);

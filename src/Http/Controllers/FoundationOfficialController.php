@@ -45,7 +45,11 @@ class FoundationOfficialController extends Controller
     {
         Gate::authorize('create', FoundationOfficial::class);
 
-        $request->validate([]);
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required|min_digits:16|numeric',
+            'phone' => 'required|unique:Module\Foundation\Models\FoundationBiodata,phone',
+        ]);
 
         return FoundationOfficial::storeRecord($request, $foundationWorkunit);
     }
@@ -76,7 +80,11 @@ class FoundationOfficialController extends Controller
     {
         Gate::authorize('update', $foundationOfficial);
 
-        $request->validate([]);
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required|min_digits:16|numeric',
+            'phone' => 'required|unique:Module\Foundation\Models\FoundationBiodata,phone',
+        ]);
 
         return FoundationOfficial::updateRecord($request, $foundationOfficial);
     }

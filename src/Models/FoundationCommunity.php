@@ -109,6 +109,29 @@ class FoundationCommunity extends Model
     }
 
     /**
+     * mapRecordBase function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapRecordBase(Request $request): array
+    {
+        return [
+            'id' => null,
+            'name' => null,
+            'slug' => null,
+            'communitymap_id' => null,
+            'workunit_id' => $request->segment(4),
+            'village_id' => null,
+            'subdistrict_id' => null,
+            'regency_id' => null,
+            'officer_id' => null,
+            'citizen' => null,
+            'neighborhood' => null,
+        ];
+    }
+
+    /**
      * mapCombos function
      *
      * @param Request $request
@@ -116,10 +139,13 @@ class FoundationCommunity extends Model
      */
     public static function mapCombos(Request $request, $model = null): array
     {
+        $workunit = FoundationWorkunit::find($request->segment(4));
+        $village = $model ? $model->village : optional($workunit)->village;
+
         return [
             'communitymaps' => FoundationCommunitymap::forCombo(),
-            'subdistricts' => FoundationSubdistrict::where('regency_id', 3)->forCombo(),
-            'villages' => optional($model)->subdistrict_id ? FoundationVillage::where('district_id', $model->subdistrict_id)->forCombo() : [],
+            'subdistricts' => $village ? FoundationSubdistrict::where('id', $village->district_id)->forCombo() : [],
+            'villages' => $village ? FoundationVillage::where('id', $village->id)->forCombo() : [],
         ];
     }
 
@@ -258,6 +284,60 @@ class FoundationCommunity extends Model
     }
 
     /**
+     * generatePositions function
+     *
+     * @param [type] $community
+     * @return void
+     */
+    protected static function generatePositions($community)
+    {
+        if ($community->positions->count() > 0) {
+            return;
+        }
+
+        $workunit = FoundationWorkunit::find($community->workunit_id);
+
+        /** CREATE POSITIONS */
+        foreach (FoundationOrganization::where('scope', 'LKD')->orderBy('_lft')->get() as $organization) {
+            $model = new FoundationPosition();
+
+            $model->name = $organization->name;
+            $model->posmap_id = $organization->posmap_id;
+            $model->village_id = $community->village_id;
+            $model->workunitable_id = $community->id;
+            $model->workunitable_type = get_class($community);
+            $model->organization_id = $organization->id;
+            $model->position_type = $organization->position_type;
+
+            if ($workunit->scope === 'KELURAHAN') {
+                switch ($organization->posmap_id) {
+                    case 7:
+                        $model->name = 'LURAH';
+                        break;
+
+                    default:
+                        $model->name = str_replace('DESA', 'KELURAHAN', $model->name);
+                        break;
+                }
+            }
+
+            $parent = null;
+
+            if ($organization->parent_id) {
+                $parent = FoundationPosition::where('village_id', $community->village_id)
+                    ->where('workunitable_id', $community->id)
+                    ->where('workunitable_type', get_class($community))
+                    ->where('organization_id', $organization->parent_id)
+                    ->first();
+            }
+
+            $model->slug = sha1(str($organization->id . ' ' . $community->village_id . ' ' . $community->slug)->slug());
+            $model->parent_id = $parent ? $parent->id : null;
+            $model->save();
+        }
+    }
+
+    /**
      * The model store method
      *
      * @param Request $request
@@ -265,10 +345,11 @@ class FoundationCommunity extends Model
      */
     public static function storeRecord(Request $request)
     {
+        $communitymap   = FoundationCommunitymap::find($request->communitymap_id);
+        $subdistrict    = FoundationSubdistrict::find($request->subdistrict_id);
+        $village        = FoundationVillage::find($request->village_id);
+
         if (! $request->name) {
-            $communitymap   = FoundationCommunitymap::find($request->communitymap_id);
-            $subdistrict    = FoundationSubdistrict::find($request->subdistrict_id);
-            $village        = FoundationVillage::find($request->village_id);
             $name           = optional($communitymap)->short ? optional($communitymap)->short . ' DESA ' . optional($village)->name : optional($communitymap)->name;
         } else {
             $name           = $request->name;
@@ -294,9 +375,12 @@ class FoundationCommunity extends Model
             $model->subdistrict_id = $request->subdistrict_id;
             $model->village_id = $request->village_id;
             $model->regency_id = optional($subdistrict)->regency_id;
+            $model->workunit_id = $request->workunit_id;
             $model->save();
 
             DB::connection($model->connection)->commit();
+
+            static::generatePositions($model);
 
             return new CommunityResource($model);
         } catch (\Exception $e) {
@@ -318,10 +402,11 @@ class FoundationCommunity extends Model
      */
     public static function updateRecord(Request $request, $model)
     {
+        $communitymap   = FoundationCommunitymap::find($request->communitymap_id);
+        $subdistrict    = FoundationSubdistrict::find($request->subdistrict_id);
+        $village        = FoundationVillage::find($request->village_id);
+
         if (! $request->name) {
-            $communitymap   = FoundationCommunitymap::find($request->communitymap_id);
-            $subdistrict    = FoundationSubdistrict::find($request->subdistrict_id);
-            $village        = FoundationVillage::find($request->village_id);
             $name           = optional($communitymap)->short ? optional($communitymap)->short . ' DESA ' . optional($village)->name : optional($communitymap)->name;
         } else {
             $name           = $request->name;
@@ -346,6 +431,7 @@ class FoundationCommunity extends Model
             $model->subdistrict_id = $request->subdistrict_id;
             $model->village_id = $request->village_id;
             $model->regency_id = optional($subdistrict)->regency_id;
+            $model->workunit_id = $request->workunit_id;
             $model->save();
 
             DB::connection($model->connection)->commit();

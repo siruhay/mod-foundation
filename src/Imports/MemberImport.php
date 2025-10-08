@@ -6,7 +6,6 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Module\Foundation\Models\FoundationBiodata;
-use Module\Foundation\Models\FoundationMember;
 use Module\Foundation\Models\FoundationVillage;
 use Module\Foundation\Models\FoundationPosition;
 use Module\Foundation\Models\FoundationWorkunit;
@@ -93,44 +92,7 @@ class MemberImport implements ToCollection, WithHeadingRow
                 $community->neighborhood = $neighborhood;
                 $community->save();
 
-                /** CREATE POSITIONS */
-                foreach (FoundationOrganization::where('scope', 'LKD')->orderBy('_lft')->get() as $organization) {
-                    $model = new FoundationPosition();
-
-                    $model->name = $organization->name;
-                    $model->posmap_id = $organization->posmap_id;
-                    $model->village_id = $community->village_id;
-                    $model->workunitable_id = $community->id;
-                    $model->workunitable_type = get_class($community);
-                    $model->organization_id = $organization->id;
-                    $model->position_type = $organization->position_type;
-
-                    if ($workunit->scope === 'KELURAHAN') {
-                        switch ($organization->posmap_id) {
-                            case 7:
-                                $model->name = 'LURAH';
-                                break;
-
-                            default:
-                                $model->name = str_replace('DESA', 'KELURAHAN', $model->name);
-                                break;
-                        }
-                    }
-
-                    $parent = null;
-
-                    if ($organization->parent_id) {
-                        $parent = FoundationPosition::where('village_id', $community->village_id)
-                            ->where('workunitable_id', $community->id)
-                            ->where('workunitable_type', get_class($community))
-                            ->where('organization_id', $organization->parent_id)
-                            ->first();
-                    }
-
-                    $model->slug = sha1(str($organization->id . ' ' . $community->village_id . ' ' . $community->slug)->slug());
-                    $model->parent_id = $parent ? $parent->id : null;
-                    $model->save();
-                }
+                FoundationCommunity::generatePositions($community);
             }
 
             /** CREATE NEW RECORD */
