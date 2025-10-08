@@ -19,8 +19,39 @@ class FoundationOfficial extends FoundationBiodata
     protected static function booted(): void
     {
         static::addGlobalScope('official', function (Builder $builder) {
-            $builder->where('type', 'DESA');
+            $builder->whereIn('type', ['DESA', 'OPD', 'KECAMATAN', 'KELURAHAN']);
         });
+    }
+
+    /**
+     * mapRecordBase function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapRecordBase(Request $request): array
+    {
+        $workunit = FoundationWorkunit::find($request->segment(4));
+
+        if (in_array($workunit->scope, ['OPD', 'KECAMATAN', 'KELURAHAN'])) {
+            $kind = 'ASN';
+        } else {
+            $kind = 'NON-ASN';
+        }
+
+        return [
+            'id' => null,
+            'name' => null,
+            'phone' => null,
+            'kind' => $kind,
+            'scope' => optional($workunit)->scope,
+            'gender_id' => null,
+            'faith_id' => null,
+            'position_id' => null,
+            'workunitable_type' => get_class($workunit),
+            'workunitable_id' => $workunit->id,
+            'address' => null,
+        ];
     }
 
     /**

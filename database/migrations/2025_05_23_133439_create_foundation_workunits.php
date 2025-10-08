@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->id();
             $table->string('name')->index();
             $table->string('slug', 40)->unique();
-            $table->enum('scope', ['OPD', 'UPT', 'KECAMATAN', 'KELURAHAN', 'DESA'])->index()->default('OPD');
+            $table->enum('scope', ['OPD', 'BADAN', 'UPT', 'KECAMATAN', 'KELURAHAN', 'DESA'])->index()->default('OPD');
             $table->foreignId('village_id')->nullable();
             $table->jsonb('meta')->nullable();
             $table->nestedSet();

@@ -118,8 +118,8 @@ class FoundationMember extends FoundationBiodata
             $model->village_id = $parent->village_id;
             $model->subdistrict_id = $parent->subdistrict_id;
             $model->regency_id = $parent->regency_id;
-            $model->community_id = $parent->id;
-            $model->communitymap_id = $parent->communitymap_id;
+            // $model->community_id = $parent->id;
+            // $model->communitymap_id = $parent->communitymap_id;
             $model->citizen = $request->citizen;
             $model->neighborhood = $request->neighborhood;
             $model->scope = $request->scope;
@@ -182,8 +182,8 @@ class FoundationMember extends FoundationBiodata
             $model->village_id = $parent->village_id;
             $model->subdistrict_id = $parent->subdistrict_id;
             $model->regency_id = $parent->regency_id;
-            $model->community_id = $parent->id;
-            $model->communitymap_id = $parent->communitymap_id;
+            // $model->community_id = $parent->id;
+            // $model->communitymap_id = $parent->communitymap_id;
             $model->citizen = $request->citizen;
             $model->neighborhood = $request->neighborhood;
             $model->scope = $request->scope;

@@ -10,6 +10,7 @@
 							label="Nama"
 							v-model="record.name"
 							hide-details
+							readonly
 						></v-text-field>
 					</v-col>
 
@@ -19,6 +20,7 @@
 							label="Induk"
 							v-model="record.parent_id"
 							hide-details
+							readonly
 						></v-select>
 					</v-col>
 
@@ -28,6 +30,7 @@
 							label="Tipe"
 							v-model="record.scope"
 							hide-details
+							readonly
 						></v-select>
 					</v-col>
 
@@ -38,6 +41,7 @@
 							label="Kecamatan"
 							v-model="record.subdistrict_id"
 							hide-details
+							readonly
 						></v-combobox>
 					</v-col>
 
@@ -48,6 +52,7 @@
 							label="Desa"
 							v-model="record.village_id"
 							hide-details
+							readonly
 						></v-combobox>
 					</v-col>
 				</v-row>

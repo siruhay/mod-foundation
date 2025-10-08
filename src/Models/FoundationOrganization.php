@@ -78,6 +78,7 @@ class FoundationOrganization extends Model
     {
         return [
             ['title' => 'Name', 'value' => 'name'],
+            ['title' => 'Scope', 'value' => 'scope'],
             ['title' => 'Updated', 'value' => 'updated_at', 'sortable' => false, 'width' => '170'],
         ];
     }
@@ -107,6 +108,7 @@ class FoundationOrganization extends Model
         return [
             'id' => $model->id,
             'name' => $model->name,
+            'scope' => $model->scope,
             'nest_deep' => $model->depth,
             'nest_leaf' => $model->isLeaf(),
             'nest_next' => $model->nextSiblings()->count() > 0,

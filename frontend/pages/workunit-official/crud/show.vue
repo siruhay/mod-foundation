@@ -8,6 +8,7 @@
 							label="Nama"
 							v-model="record.name"
 							hide-details
+							readonly
 						></v-text-field>
 					</v-col>
 
@@ -16,6 +17,7 @@
 							label="N.I.K"
 							v-model="record.slug"
 							hide-details
+							readonly
 						></v-text-field>
 					</v-col>
 
