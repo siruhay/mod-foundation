@@ -3,14 +3,15 @@
 namespace Module\Foundation\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
-use Module\Foundation\Models\FoundationCommunity;
-use Module\Foundation\Models\FoundationOfficial;
-use Module\Foundation\Models\FoundationSubdistrict;
-use Module\Reference\Models\ReferenceSubdistrict;
+use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Module\Reference\Models\ReferenceVillage;
+use Module\Foundation\Models\FoundationOfficial;
+use Module\Foundation\Models\FoundationCommunity;
+use Module\Reference\Models\ReferenceSubdistrict;
+use Module\Foundation\Models\FoundationSubdistrict;
 
 class DashboardController extends Controller
 {
@@ -25,6 +26,91 @@ class DashboardController extends Controller
         //
     }
 
+    /**
+     * upload function
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function upload(Request $request)
+    {
+        $request->validate([
+            'file' => "required|file|max:2048"
+        ]);
+
+        if ($request->hasFile('file') && $request->file('file')) {
+            $fileslug = $request->slug;
+            $filename = $request->uuid . $request->extension;
+            $filepath = $fileslug . DIRECTORY_SEPARATOR . $filename;
+
+            if (Storage::disk('uploads')->putFileAs($fileslug, $request->file('file'), $filename)) {
+                return response()->json([
+                    'path' => $filepath
+                ], 200);
+            }
+        }
+
+        return response()->json([
+            'status' => 422,
+            'message' => 'Upload file bermasalah'
+        ], 422);
+    }
+
+    /**
+     * download function
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function download(Request $request)
+    {
+        if (!Storage::disk('uploads')->exists($request->path)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'File not found'
+            ], 404);
+        }
+
+        return optional(Storage::disk('uploads'))->download($request->path, 'sk-ppk.pdf', [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="sample.pdf"',
+        ]);
+    }
+
+    /**
+     * destroy function
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function destroy(Request $request)
+    {
+        if (!Storage::disk('uploads')->exists($request->path)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'File not found'
+            ], 404);
+        }
+
+        if (Storage::disk('uploads')->delete($request->path)) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Hapus file dari server berhasil.'
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Hapus file dari server gagal.'
+        ], 500);
+    }
+
+    /**
+     * combos function
+     *
+     * @param Request $request
+     * @return mixed
+     */
     public function combos(Request $request): mixed
     {
         if ($request->has('regency')) {

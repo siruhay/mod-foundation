@@ -17,6 +17,9 @@ use Module\Foundation\Http\Controllers\FoundationWorkunitCommunityController;
 Route::get('dashboard', [DashboardController::class, 'index']);
 Route::get('report', [DashboardController::class, 'report']);
 Route::get('fetch-combos', [DashboardController::class, 'combos']);
+Route::post('upload-document', [DashboardController::class, 'upload']);
+Route::get('upload-document', [DashboardController::class, 'download']);
+Route::delete('upload-document', [DashboardController::class, 'destroy']);
 
 Route::resource('community', FoundationCommunityController::class)->parameters(['community' => 'foundationCommunity']);
 Route::resource('organization', FoundationOrganizationController::class)->parameters(['organization' => 'foundationOrganization']);
