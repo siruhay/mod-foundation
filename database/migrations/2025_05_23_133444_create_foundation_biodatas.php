@@ -18,6 +18,7 @@ return new class () extends Migration {
              * 'LKD'
              * 'OPD'
              * 'SPEAKER'
+             * 'BENEFICIARY'
              */
 
             /**
@@ -33,8 +34,9 @@ return new class () extends Migration {
 
             $table->id();
             $table->string('name', 150);
-            $table->string('slug', 18)->unique()->nullable();
+            $table->string('slug', 18)->unique()->nullable();   // NIK
             $table->string('phone', 16)->unique()->nullable();
+            $table->date('birthdate')->index()->nullable();
             $table->enum('kind', ['ASN', 'NON-ASN'])->index()->default('ASN');
             $table->string('type')->index()->default('ASN');
             $table->string('role', 50)->index()->nullable();
@@ -48,6 +50,7 @@ return new class () extends Migration {
             $table->foreignId('regency_id')->nullable();
             $table->string('citizen')->nullable();
             $table->string('neighborhood')->nullable();
+            $table->string('family_card_number')->index()->nullable();      // KK
             $table->enum('scope', ['PENDIDIKAN', 'KESEHATAN', 'PEKERJAAN-UMUM', 'PERUMAHAN-RAKYAT', 'TRANTIB', 'SOSIAL'])->index()->nullable();
             $table->jsonb('meta')->nullable();
             $table->softDeletes();

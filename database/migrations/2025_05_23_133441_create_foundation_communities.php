@@ -22,6 +22,7 @@ return new class () extends Migration {
             $table->foreignId('officer_id')->nullable();
             $table->string('citizen')->nullable();
             $table->string('neighborhood')->nullable();
+            $table->jsonb('scopes')->nullable(); // ['HEALTH','EDUCATION','SOCIAL','ENVIRONMENT','ORDER']
             $table->jsonb('meta')->nullable();
             $table->softDeletes();
             $table->timestamps();
