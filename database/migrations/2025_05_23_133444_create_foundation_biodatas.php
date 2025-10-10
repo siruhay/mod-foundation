@@ -51,7 +51,7 @@ return new class () extends Migration {
             $table->string('citizen')->nullable();
             $table->string('neighborhood')->nullable();
             $table->string('family_card_number')->index()->nullable();      // KK
-            $table->enum('scope', ['PENDIDIKAN', 'KESEHATAN', 'PEKERJAAN-UMUM', 'PERUMAHAN-RAKYAT', 'TRANTIB', 'SOSIAL'])->index()->nullable();
+            $table->foreignId('scope')->nullable();
             $table->jsonb('meta')->nullable();
             $table->softDeletes();
             $table->timestamps();
