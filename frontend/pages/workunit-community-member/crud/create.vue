@@ -1,6 +1,6 @@
 <template>
 	<form-create with-helpdesk>
-		<template v-slot:default="{ combos: { genders, positions }, record }">
+		<template v-slot:default="{ combos: { genders, positions, scopes }, record }">
 			<v-card-text>
 				<v-row dense>
 					<v-col cols="12">
@@ -78,20 +78,5 @@
 <script>
 export default {
 	name: "foundation-member-create",
-
-	data: () => ({
-		scopes: [
-			{ title: "Non SPM", value: null },
-			{ title: "Pendidikan", value: "PENDIDIKAN" },
-			{ title: "Kesehatan", value: "KESEHATAN" },
-			{ title: "Pekerjaan Umum", value: "PEKERJAAN-UMUM" },
-			{ title: "Perumahan Rakyat", value: "PERUMAHAN-RAKYAT" },
-			{
-				title: "Ketentraman, Ketertiban Umum dan Perlindungan Masyarakat",
-				value: "TRANTIB",
-			},
-			{ title: "Sosial", value: "SOSIAL" },
-		],
-	}),
 };
 </script>

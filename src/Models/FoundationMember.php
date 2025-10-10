@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Module\Foundation\Events\TrainingMemberUpdated;
 use Module\Foundation\Http\Resources\MemberResource;
+use Module\Posyandu\Models\PosyanduService;
 
 class FoundationMember extends FoundationBiodata
 {
@@ -32,6 +33,7 @@ class FoundationMember extends FoundationBiodata
     {
         $community = FoundationCommunity::find($request->segment(4));
         return [
+            'scopes' => PosyanduService::forCombo(),
             'genders' => FoundationGender::forCombo(),
             'positions' => $community->positions()->orderBy('_lft')->forCombo()
         ];
