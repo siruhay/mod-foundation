@@ -108,8 +108,6 @@ class MemberImport implements ToCollection, WithHeadingRow
                 $model->village_id = optional($village)->id;
                 $model->subdistrict_id = optional($village)->district_id;
                 $model->regency_id = optional($village)->regency_id;
-                $model->community_id = optional($community)->id;
-                $model->communitymap_id = $maps;
                 $model->citizen = $record->citizen ? str_pad($record->citizen, 2, "0", STR_PAD_LEFT) : null;
                 $model->neighborhood = $record->neighborhood ? str_pad($record->neighborhood, 3, "0", STR_PAD_LEFT) : null;
                 $model->workunitable_type = get_class($community);

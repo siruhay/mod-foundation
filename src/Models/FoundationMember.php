@@ -5,6 +5,7 @@ namespace Module\Foundation\Models;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Module\Foundation\Events\TrainingMemberUpdated;
 use Module\Foundation\Http\Resources\MemberResource;
 use Module\Posyandu\Models\PosyanduService;
@@ -51,6 +52,7 @@ class FoundationMember extends FoundationBiodata
             ['title' => 'Name', 'value' => 'name'],
             ['title' => 'NIK', 'value' => 'slug'],
             ['title' => 'Jabatan', 'value' => 'position'],
+            ['title' => 'S.P.M', 'value' => 'scope'],
             ['title' => 'Updated', 'value' => 'updated_at', 'sortable' => false, 'width' => '170'],
         ];
     }
@@ -68,6 +70,7 @@ class FoundationMember extends FoundationBiodata
             'name' => $model->name,
             'slug' => $model->slug,
             'position' => optional($model->position)->name,
+            'scope' => $model->service?->name,
 
             'subtitle' => (string) $model->updated_at,
             'updated_at' => (string) $model->updated_at,
@@ -96,6 +99,11 @@ class FoundationMember extends FoundationBiodata
             'neighborhood' => $model->neighborhood,
             'scope' => $model->scope,
         ];
+    }
+
+    public function service(): BelongsTo
+    {
+        return $this->belongsTo(PosyanduService::class, 'scope');
     }
 
     /**
