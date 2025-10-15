@@ -33,6 +33,7 @@ class FoundationMember extends FoundationBiodata
     public static function mapCombos(Request $request, $model = null): array
     {
         $community = FoundationCommunity::find($request->segment(4));
+
         return [
             'scopes' => PosyanduService::forCombo(),
             'genders' => FoundationGender::forCombo(),
