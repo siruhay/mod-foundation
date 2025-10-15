@@ -226,6 +226,49 @@ class FoundationBiodata extends Model
     }
 
     /**
+     * storeFrom function
+     *
+     * @param Object $source
+     * @return Model|null
+     */
+    public static function storeFrom(Object $source): Model|null
+    {
+        if ($model = static::firstWhere('slug', $source->slug)) {
+            return $model;
+        }
+
+        $model = new static();
+
+        DB::connection($model->connection)->beginTransaction();
+
+        try {
+            $model->name = $source->name;
+            $model->slug = $source->slug;
+            $model->phone = $source->phone;
+            $model->kind = $source->kind;
+            $model->type = $source->type;
+            $model->role = $source->role;
+            $model->gender_id = $source->gender_id;
+            $model->workunitable_type = $source->workunitable_type;
+            $model->workunitable_id = $source->workunitable_id;
+            $model->village_id = $source->village_id;
+            $model->subdistrict_id = $source->subdistrict_id;
+            $model->regency_id = $source->regency_id;
+            $model->citizen = $source->citizen;
+            $model->neighborhood = $source->neighborhood;
+            $model->save();
+
+            DB::connection($model->connection)->commit();
+
+            return $model;
+        } catch (\Exception $e) {
+            DB::connection($model->connection)->rollBack();
+
+            return null;
+        }
+    }
+
+    /**
      * The model update method
      *
      * @param Request $request
