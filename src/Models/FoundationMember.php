@@ -135,6 +135,10 @@ class FoundationMember extends FoundationBiodata
             $model->kind = 'NON-ASN';
             $model->type = 'LKD';
 
+            if (get_class($parent) === 'Module\MyFoundation\Models\MyFoundationCommunity') {
+                $model->workunitable_type = 'Module\Foundation\Models\FoundationCommunity';
+            }
+
             $parent->members()->save($model);
 
             if ($model->slug) {
