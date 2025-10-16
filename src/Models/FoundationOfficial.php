@@ -162,7 +162,10 @@ class FoundationOfficial extends FoundationBiodata
             $model->save();
 
             if ($model->slug) {
-                TrainingOfficialUpdated::dispatch($model, ['mytraining-member']);
+                TrainingOfficialUpdated::dispatch($model, array_merge(
+                    ['mytraining-member'],
+                    $parent->scope ? ['posyandu-admin-' . strtolower($parent->scope) ] : []
+                ));
             }
 
             DB::connection($model->connection)->commit();
@@ -187,7 +190,7 @@ class FoundationOfficial extends FoundationBiodata
      */
     public static function updateRecord(Request $request, $model, $parent = null)
     {
-        $village        = FoundationVillage::find($request->village_id);
+        $village = FoundationVillage::find($request->village_id);
 
         DB::connection($model->connection)->beginTransaction();
 
@@ -203,7 +206,10 @@ class FoundationOfficial extends FoundationBiodata
             $model->save();
 
             if ($model->slug) {
-                TrainingOfficialUpdated::dispatch($model, ['mytraining-member']);
+                TrainingOfficialUpdated::dispatch($model, array_merge(
+                    ['mytraining-member'],
+                    $parent->scope ? ['posyandu-admin-' . strtolower($parent->scope) ] : []
+                ));
             }
 
             DB::connection($model->connection)->commit();

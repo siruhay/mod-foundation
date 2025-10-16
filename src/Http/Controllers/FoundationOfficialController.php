@@ -83,7 +83,7 @@ class FoundationOfficialController extends Controller
         $request->validate([
             'name' => 'required',
             'slug' => 'required|min_digits:16|numeric',
-            'phone' => 'required|unique:Module\Foundation\Models\FoundationBiodata,phone',
+            'phone' => 'required',
         ]);
 
         return FoundationOfficial::updateRecord($request, $foundationOfficial);
