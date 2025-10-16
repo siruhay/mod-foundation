@@ -1,6 +1,11 @@
 <template>
 	<form-edit with-helpdesk>
-		<template v-slot:default="{ combos: { genders, positions }, record }">
+		<template
+			v-slot:default="{
+				combos: { faiths, genders, positions, regencies, subdistricts, villages },
+				record,
+			}"
+		>
 			<v-card-text>
 				<v-row dense>
 					<v-col cols="12">
@@ -27,6 +32,24 @@
 						></v-text-field>
 					</v-col>
 
+					<v-col cols="6">
+						<v-date-input
+							prepend-icon=""
+							label="Tanggal Lahir"
+							v-model="record.birthdate"
+							hide-details
+						></v-date-input>
+					</v-col>
+
+					<v-col cols="6">
+						<v-select
+							:items="faiths"
+							label="Agama"
+							v-model="record.faith_id"
+							hide-details
+						></v-select>
+					</v-col>
+
 					<v-col cols="8">
 						<v-select
 							:items="positions"
@@ -47,6 +70,7 @@
 
 					<v-col cols="6">
 						<v-combobox
+							:items="regencies"
 							label="Kota/Kabupaten"
 							v-model="record.regency_id"
 							hide-details
@@ -55,6 +79,7 @@
 
 					<v-col cols="6">
 						<v-combobox
+							:items="subdistricts"
 							label="Kecamatan"
 							v-model="record.subdistrict_id"
 							hide-details
@@ -63,6 +88,7 @@
 
 					<v-col cols="6">
 						<v-combobox
+							:items="villages"
 							label="Kelurahan/Desa"
 							v-model="record.village_id"
 							hide-details

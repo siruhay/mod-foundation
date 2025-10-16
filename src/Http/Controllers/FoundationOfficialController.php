@@ -86,7 +86,7 @@ class FoundationOfficialController extends Controller
             'phone' => 'required',
         ]);
 
-        return FoundationOfficial::updateRecord($request, $foundationOfficial);
+        return FoundationOfficial::updateRecord($request, $foundationOfficial, $foundationWorkunit);
     }
 
     /**

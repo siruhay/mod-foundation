@@ -2,9 +2,8 @@
 	<form-create with-helpdesk>
 		<template
 			v-slot:default="{
-				combos: { genders, positions, regencies, subdistrics, villages },
+				combos: { faiths, genders, positions, regencies, subdistricts, villages },
 				record,
-				store,
 			}"
 		>
 			<v-card-text>
@@ -33,6 +32,24 @@
 						></v-text-field>
 					</v-col>
 
+					<v-col cols="6">
+						<v-date-input
+							prepend-icon=""
+							label="Tanggal Lahir"
+							v-model="record.birthdate"
+							hide-details
+						></v-date-input>
+					</v-col>
+
+					<v-col cols="6">
+						<v-select
+							:items="faiths"
+							label="Agama"
+							v-model="record.faith_id"
+							hide-details
+						></v-select>
+					</v-col>
+
 					<v-col cols="8">
 						<v-select
 							:items="positions"
@@ -54,29 +71,24 @@
 					<v-col cols="6">
 						<v-combobox
 							:items="regencies"
-							:return-object="false"
 							label="Kota/Kabupaten"
 							v-model="record.regency_id"
 							hide-details
-							@update:modelValue="fetchSubdistrict($event, store.combos)"
 						></v-combobox>
 					</v-col>
 
 					<v-col cols="6">
 						<v-combobox
-							:items="subdistrics"
-							:return-object="false"
+							:items="subdistricts"
 							label="Kecamatan"
 							v-model="record.subdistrict_id"
 							hide-details
-							@update:modelValue="fetchVillage($event, store.combos)"
 						></v-combobox>
 					</v-col>
 
 					<v-col cols="6">
 						<v-combobox
 							:items="villages"
-							:return-object="false"
 							label="Kelurahan/Desa"
 							v-model="record.village_id"
 							hide-details

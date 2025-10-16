@@ -63,11 +63,12 @@ class FoundationOfficial extends FoundationBiodata
     public static function mapCombos(Request $request, $model = null): array
     {
         return [
+            'faiths' => FoundationFaith::forCombo(),
             'genders' => FoundationGender::forCombo(),
             'positions' => FoundationWorkunit::find((int) $request->segment(4))->positions()->orderBy('_lft')->forCombo(),
-            'regencies' => ReferenceRegency::forCombo(),
-            'subdistricts' => optional($model)->regency_id ? FoundationSubdistrict::where('regency_id', 3)->forCombo() : [],
-            'villages' => optional($model)->subdistrict_id ? FoundationVillage::where('district_id', $model->subdistrict_id)->forCombo() : [],
+            'regencies' => $model ? ReferenceRegency::where('id', $model->regency_id)->forCombo() : ReferenceRegency::forCombo(),
+            'subdistricts' => $model ? FoundationSubdistrict::where('id', $model->subdistrict_id)->forCombo() : FoundationSubdistrict::where('regency_id', 3)->forCombo(),
+            'villages' => $model ? FoundationVillage::where('id', $model->village_id)->forCombo() : [],
         ];
     }
 
@@ -143,22 +144,26 @@ class FoundationOfficial extends FoundationBiodata
      */
     public static function storeRecord(Request $request, $parent = null)
     {
-        $model          = new static();
-        $village        = FoundationVillage::find($request->village_id);
+        $model      = new static();
+        $workunit   = FoundationWorkunit::find($request->segment(4));
+        $village    = $workunit->village;
 
         DB::connection($model->connection)->beginTransaction();
 
         try {
             $model->name = $request->name;
             $model->slug = $request->slug;
-            $model->type = 'DESA';
+            $model->type = $parent->scope;
             $model->phone = $request->phone;
             $model->gender_id = $request->gender_id;
             $model->position_id = $request->position_id;
+            $model->birthdate = $request->birthdate;
+            $model->faith_id = $request->faith_id;
+            $model->citizen = $request->citizen;
+            $model->neighborhood = $request->neighborhood;
             $model->regency_id = $village->regency_id;
             $model->subdistrict_id = $village->district_id;
-            $model->village_id = $request->village_id;
-
+            $model->village_id = $village->id;
             $model->save();
 
             if ($model->slug) {
@@ -190,19 +195,25 @@ class FoundationOfficial extends FoundationBiodata
      */
     public static function updateRecord(Request $request, $model, $parent = null)
     {
-        $village = FoundationVillage::find($request->village_id);
+        $workunit   = FoundationWorkunit::find($request->segment(4));
+        $village    = $workunit->village;
 
         DB::connection($model->connection)->beginTransaction();
 
         try {
             $model->name = $request->name;
             $model->slug = $request->slug;
+            $model->type = $parent->scope;
             $model->phone = $request->phone;
             $model->gender_id = $request->gender_id;
             $model->position_id = $request->position_id;
+            $model->birthdate = $request->birthdate;
+            $model->faith_id = $request->faith_id;
+            $model->citizen = $request->citizen;
+            $model->neighborhood = $request->neighborhood;
             $model->regency_id = $village->regency_id;
             $model->subdistrict_id = $village->district_id;
-            $model->village_id = $request->village_id;
+            $model->village_id = $village->id;
             $model->save();
 
             if ($model->slug) {
