@@ -352,7 +352,7 @@ class FoundationCommunity extends Model
         if (! $request->name) {
             $name           = optional($communitymap)->short ? optional($communitymap)->short . ' DESA ' . optional($village)->name : optional($communitymap)->name;
         } else {
-            $name           = $request->name;
+            $name           = str($request->name)->upper()->toString();
         }
 
         $slug               = sha1($name);
