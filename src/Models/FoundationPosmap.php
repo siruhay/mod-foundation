@@ -87,6 +87,39 @@ class FoundationPosmap extends Model
     }
 
     /**
+     * storeFrom function
+     *
+     * @param [type] $posmap
+     * @param [type] $scope
+     * @return Model|null
+     */
+    public static function storeFrom($posmap, $scope): Model|null
+    {
+        if (is_array($posmap)) {
+            return static::find($posmap['value']);
+        }
+
+        $model = new static();
+
+        DB::connection($model->connection)->beginTransaction();
+
+        try {
+            $model->name    = $posmap;
+            $model->slug    = sha1(str($posmap)->slug()->toString());
+            $model->scope   = $scope;
+            $model->save();
+
+            DB::connection($model->connection)->commit();
+
+            return $model;
+        } catch (\Exception $e) {
+            DB::connection($model->connection)->rollBack();
+
+            return null;
+        }
+    }
+
+    /**
      * The model update method
      *
      * @param Request $request

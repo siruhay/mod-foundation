@@ -10,8 +10,8 @@ use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Module\Foundation\Http\Resources\PositionResource;
 
 class FoundationPosition extends Model
@@ -141,10 +141,10 @@ class FoundationPosition extends Model
             'name' => $model->name,
             'scope' => $model->scope,
             'officer_name' => optional($model->officer)->name,
-            'nest_deep' => $model->depth,
-            'nest_leaf' => $model->isLeaf(),
-            'nest_next' => $model->nextSiblings()->count() > 0,
-            'nest_prev' => $model->prevSiblings()->count() > 0,
+            'nest_deep' => optional($model)->depth,
+            'nest_leaf' => optional($model)->isLeaf(),
+            'nest_next' => optional($model)->nextSiblings()->count() > 0,
+            'nest_prev' => optional($model)->prevSiblings()->count() > 0,
             'subtitle' => (string) $model->updated_at,
             'updated_at' => (string) $model->updated_at,
         ];
@@ -177,16 +177,29 @@ class FoundationPosition extends Model
      * @param Request $request
      * @return void
      */
-    public static function storeRecord(Request $request)
+    public static function storeRecord(Request $request, $parent = null)
     {
-        $model = new static();
+        $model      = new static();
+        $scope      = $parent->scope ?: 'OPD';
+        $posmap     = FoundationPosmap::storeFrom($request->posmap, $scope);
+        $typeName   = get_class($parent);
+        $typeId     = optional($parent)->id;
+        $parentId   = $request->parent_id;
 
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            $model->name = $request->name;
-            $model->slug = sha1($request->name);
-            $model->scope = $request->scope;
+            $model->name = $posmap->name;
+            $model->slug = sha1(
+                str($posmap->name . ' ' . $typeName . ' ' . $typeId . ' ' . $parentId)->slug()->toString()
+            );
+            $model->posmap_id = $posmap->id;
+            $model->village_id = null;
+            $model->workunitable_type = $typeName;
+            $model->workunitable_id = $typeId;
+            $model->organization_id = null;
+            $model->position_type = $request->position_type;
+            $model->parent_id = $request->parent_id;
             $model->save();
 
             DB::connection($model->connection)->commit();

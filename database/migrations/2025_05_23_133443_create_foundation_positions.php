@@ -15,9 +15,9 @@ return new class () extends Migration {
             $table->text('name')->index();
             $table->text('slug')->unique();
             $table->foreignId('posmap_id');
-            $table->foreignId('village_id');
+            $table->foreignId('village_id')->nullable();
             $table->morphs('workunitable');
-            $table->foreignId('organization_id');
+            $table->foreignId('organization_id')->nullable();
             $table->foreignId('officer_id')->nullable();
             $table->enum('position_type', ['STRUCTURAL', 'FUNCTIONAL', 'EXECUTOR'])->default('EXECUTOR');
             $table->jsonb('meta')->nullable();
