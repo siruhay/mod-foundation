@@ -195,6 +195,8 @@ class FoundationOfficial extends FoundationBiodata
      */
     public static function updateRecord(Request $request, $model, $parent = null)
     {
+        $scopex = $parent->scope ? ['posyandu-admin-' . strtolower($parent->scope) ] : [];
+        return $scopex;
         $workunit   = FoundationWorkunit::find($request->segment(4));
         $village    = $workunit->village;
 
