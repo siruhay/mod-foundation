@@ -133,6 +133,9 @@ class FoundationOfficial extends FoundationBiodata
             'village_id' => $model->village_id,
             'subdistrict_id' => $model->subdistrict_id,
             'regency_id' => $model->regency_id,
+            'birthdate' => $model->birthdate,
+            'faith_id' => $model->faith_id,
+            'address' => $model->address,
         ];
     }
 
@@ -164,6 +167,7 @@ class FoundationOfficial extends FoundationBiodata
             $model->regency_id = $village->regency_id;
             $model->subdistrict_id = $village->district_id;
             $model->village_id = $village->id;
+            $model->address = $request->address;
             $model->save();
 
             if ($model->slug) {
@@ -195,8 +199,6 @@ class FoundationOfficial extends FoundationBiodata
      */
     public static function updateRecord(Request $request, $model, $parent = null)
     {
-        $scopex = $parent->scope ? ['posyandu-admin-' . strtolower($parent->scope) ] : [];
-        return $scopex;
         $workunit   = FoundationWorkunit::find($request->segment(4));
         $village    = $workunit->village;
 
