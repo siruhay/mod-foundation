@@ -164,9 +164,9 @@ class FoundationOfficial extends FoundationBiodata
             $model->faith_id = $request->faith_id;
             $model->citizen = $request->citizen;
             $model->neighborhood = $request->neighborhood;
-            $model->regency_id = optional($village)->regency_id;
-            $model->subdistrict_id = optional($village)->district_id;
-            $model->village_id = optional($village)->id;
+            $model->regency_id = optional($village)->regency_id ?: $request->regency_id;
+            $model->subdistrict_id = optional($village)->district_id ?: $request->district_id;
+            $model->village_id = optional($village)->id ?: $request->village_id;
             $model->address = $request->address;
             $model->workunitable_type = get_class($parent);
             $model->workunitable_id = $parent->id;
@@ -217,9 +217,9 @@ class FoundationOfficial extends FoundationBiodata
             $model->faith_id = $request->faith_id;
             $model->citizen = $request->citizen;
             $model->neighborhood = $request->neighborhood;
-            $model->regency_id = $village->regency_id;
-            $model->subdistrict_id = $village->district_id;
-            $model->village_id = $village->id;
+            $model->regency_id = optional($village)->regency_id ?: $request->regency_id;
+            $model->subdistrict_id = optional($village)->district_id ?: $request->district_id;
+            $model->village_id = optional($village)->id ?: $request->village_id;
             $model->save();
 
             if ($model->slug) {
