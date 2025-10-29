@@ -58,9 +58,7 @@
 							label="Kecamatan"
 							v-model="record.subdistrict_id"
 							hide-details
-							@update:modelValue="
-								updateSubdistrict($event, store)
-							"
+							@update:modelValue="updateSubdistrict($event, store)"
 						></v-combobox>
 					</v-col>
 
@@ -85,11 +83,11 @@ export default {
 
 	methods: {
 		updateSubdistrict: function (subdistrict, store) {
-			this.$http(
-				`foundation/api/subdistrict/${subdistrict}/villages`
-			).then((response) => {
-				store.combos.villages = response;
-			});
+			this.$http(`foundation/api/subdistrict/${subdistrict}/villages`).then(
+				(response) => {
+					store.combos.villages = response;
+				}
+			);
 		},
 	},
 };

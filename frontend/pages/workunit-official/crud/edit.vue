@@ -71,24 +71,29 @@
 					<v-col cols="6">
 						<v-combobox
 							:items="regencies"
+							:return-object="false"
 							label="Kota/Kabupaten"
 							v-model="record.regency_id"
 							hide-details
+							@update:modelValue="fetchSubdistrict($event, store)"
 						></v-combobox>
 					</v-col>
 
 					<v-col cols="6">
 						<v-combobox
 							:items="subdistricts"
+							:return-object="false"
 							label="Kecamatan"
 							v-model="record.subdistrict_id"
 							hide-details
+							@update:modelValue="fetchVillage($event, store)"
 						></v-combobox>
 					</v-col>
 
 					<v-col cols="6">
 						<v-combobox
 							:items="villages"
+							:return-object="false"
 							label="Kelurahan/Desa"
 							v-model="record.village_id"
 							hide-details
@@ -128,5 +133,29 @@
 <script>
 export default {
 	name: "foundation-official-edit",
+
+	methods: {
+		fetchSubdistrict: function (regency, store) {
+			this.$http(`/foundation/api/fetch-combos`, {
+				method: "GET",
+				params: {
+					regency: regency,
+				},
+			}).then((res) => {
+				store.combos.subdistricts = res;
+			});
+		},
+
+		fetchVillage: function (subdistrict, store) {
+			this.$http(`/foundation/api/fetch-combos`, {
+				method: "GET",
+				params: {
+					subdistric: subdistrict,
+				},
+			}).then((res) => {
+				store.combos.villages = res;
+			});
+		},
+	},
 };
 </script>
