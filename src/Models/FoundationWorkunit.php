@@ -187,7 +187,11 @@ class FoundationWorkunit extends Model
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $request->name;
+            $model->slug = sha1(str($request->name . ' ' . $request->village_id)->slug());
+            $model->scope = $request->scope;
+            $model->village_id = $request->village_id;
+            $model->parent_id = $request->parent_id;
             $model->save();
 
             DB::connection($model->connection)->commit();
@@ -215,7 +219,11 @@ class FoundationWorkunit extends Model
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $request->name;
+            $model->slug = sha1(str($request->name . ' ' . $request->village_id)->slug());
+            $model->scope = $request->scope;
+            $model->village_id = $request->village_id;
+            $model->parent_id = $request->parent_id;
             $model->save();
 
             DB::connection($model->connection)->commit();
