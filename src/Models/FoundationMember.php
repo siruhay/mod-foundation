@@ -143,6 +143,8 @@ class FoundationMember extends FoundationBiodata
 
             if ($model->slug) {
                 if ($position->name === 'KETUA') {
+                    $parent->officer_id = $model->id;
+                    $parent->save();
                     TrainingMemberUpdated::dispatch(
                         $model,
                         array_merge(
@@ -205,6 +207,9 @@ class FoundationMember extends FoundationBiodata
 
             if ($model->slug) {
                 if ($position->name === 'KETUA') {
+                    $parent->officer_id = $model->id;
+                    $parent->save();
+
                     TrainingMemberUpdated::dispatch(
                         $model,
                         array_merge(
