@@ -11,14 +11,17 @@ use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Module\Foundation\Http\Resources\BiodataResource;
+use Module\Foundation\Database\Factories\FoundationBiodataFactory;
 
 class FoundationBiodata extends Model
 {
     use Filterable;
+    use HasFactory;
     use HasMeta;
     use HasPageSetup;
     use Searchable;
@@ -60,6 +63,11 @@ class FoundationBiodata extends Model
      * @var string
      */
     protected $defaultOrder = 'position_id';
+
+    protected static function newFactory(): FoundationBiodataFactory
+    {
+        return FoundationBiodataFactory::new();
+    }
 
     /**
      * mapHeaders function

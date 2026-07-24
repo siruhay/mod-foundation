@@ -10,14 +10,17 @@ use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Module\Foundation\Http\Resources\CommunityResource;
+use Module\Foundation\Database\Factories\FoundationCommunityFactory;
 
 class FoundationCommunity extends Model
 {
     use Filterable;
+    use HasFactory;
     use HasMeta;
     use HasPageSetup;
     use Searchable;
@@ -59,6 +62,11 @@ class FoundationCommunity extends Model
      * @var string
      */
     protected $defaultOrder = 'name';
+
+    protected static function newFactory(): FoundationCommunityFactory
+    {
+        return FoundationCommunityFactory::new();
+    }
 
     /**
      * toFilterableArray function
