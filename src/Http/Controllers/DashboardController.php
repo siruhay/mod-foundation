@@ -9,7 +9,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Module\Reference\Models\ReferenceVillage;
 use Module\Foundation\Models\FoundationOfficial;
+use Module\Foundation\Models\FoundationBiodata;
 use Module\Foundation\Models\FoundationCommunity;
+use Module\Foundation\Models\FoundationOrganization;
 use Module\Reference\Models\ReferenceSubdistrict;
 use Module\Foundation\Models\FoundationSubdistrict;
 
@@ -21,9 +23,16 @@ class DashboardController extends Controller
      * @param Request $request
      * @return void
      */
-    public function index(Request $request): void
+    public function index(Request $request): JsonResponse
     {
-        //
+        return response()->json([
+            'record' => [
+                'totalCommunities' => FoundationCommunity::count(),
+                'totalOfficials' => FoundationBiodata::where('type', 'OPD')->count(),
+                'totalMembers' => FoundationBiodata::where('type', 'LKD')->count(),
+                'totalOrganizations' => FoundationOrganization::count(),
+            ],
+        ]);
     }
 
     /**
